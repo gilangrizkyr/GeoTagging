@@ -1,0 +1,107 @@
+openapi: 3.0.0
+info:
+  title: Geotagging DPMPTSP API
+  description: API for checking spatial planning (RDTR & RTRW) zones based on coordinates.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local Development Server
+
+paths:
+  /api/spatial/check:
+    post:
+      summary: Check Spatial Zoning
+      description: Returns RDTR and RTRW information for a specific latitude and longitude.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                lat:
+                  type: number
+                  format: float
+                  description: Latitude
+                  example: -6.175392
+                lng:
+                  type: number
+                  format: float
+                  description: Longitude
+                  example: 106.827153
+              required:
+                - lat
+                - lng
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      coordinates:
+                        type: object
+                        properties:
+                          lat:
+                            type: number
+                          lng:
+                            type: number
+                      rdtr:
+                        type: object
+                        nullable: true
+                        properties:
+                          nama_zona:
+                            type: string
+                          peruntukan:
+                            type: string
+                          keterangan:
+                            type: string
+                          regulation_text:
+                            type: string
+                          color:
+                            type: string
+                      rtrw:
+                        type: object
+                        nullable: true
+                        properties:
+                          nama_kawasan:
+                            type: string
+                          fungsi_kawasan:
+                            type: string
+                          color:
+                            type: string
+
+  /api/spatial/layers:
+    get:
+      summary: Get Map Layers
+      description: Returns all RDTR and RTRW polygons in GeoJSON format.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      rdtr:
+                        type: object
+                        description: GeoJSON FeatureCollection for RDTR
+                      rtrw:
+                        type: object
+                        description: GeoJSON FeatureCollection for RTRW
