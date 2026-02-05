@@ -29,6 +29,18 @@ class SettingsModel extends Model
     }
 
     /**
+     * Get a setting by key with role-specific override.
+     */
+    public function getValueWithRole($key, $role, $default = null)
+    {
+        $roleSetting = $this->where('key', $key . '_' . $role)->first();
+        if ($roleSetting && $roleSetting['value'] !== null && $roleSetting['value'] !== '') {
+            return $roleSetting['value'];
+        }
+        return $this->getValue($key, $default);
+    }
+
+    /**
      * Update or create a setting.
      */
     public function setValue($key, $value)

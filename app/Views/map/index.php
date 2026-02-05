@@ -2,6 +2,12 @@
 <?php $this->extend('layouts/main')?>
 
 <?php $this->section('content')?>
+<?php
+$settingsModel = new \App\Models\SettingsModel();
+$role = session()->get('role');
+$mapLat = $settingsModel->getValueWithRole('map_center_lat', $role, '-3.45');
+$mapLng = $settingsModel->getValueWithRole('map_center_lng', $role, 115.97);
+?>
 <!-- Floating Widget (Sidebar on Desktop) -->
 <div class="floating-panel" style="display: none;">
     <div class="panel-header">
@@ -280,7 +286,7 @@
         $('#btnAgree').click(function () { discModal.hide(); });
 
         // Map Setup
-        const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([-3.45, 115.97], 12);
+        const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([<?= $mapLat?>, <?= $mapLng?>], 12);
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
         // Basemaps

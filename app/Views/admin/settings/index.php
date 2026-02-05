@@ -27,19 +27,35 @@ endif; ?>
             <div class="card-body p-4 pt-2">
                 <form action="<?= base_url('admin/settings/update')?>" method="post" enctype="multipart/form-data">
 
-                    <!-- Section: Brand -->
                     <div class="p-4 bg-light rounded-4 mb-4 border">
-                        <h6 class="fw-800 text-primary text-uppercase mb-4"
-                            style="font-size: 0.75rem; letter-spacing: 1px;">Identitas & Branding</h6>
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h6 class="fw-800 text-primary text-uppercase m-0"
+                                style="font-size: 0.75rem; letter-spacing: 1px;">Identitas & Branding</h6>
+                            <span
+                                class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill small fw-700">
+                                <i class="bi bi-person-badge me-1"></i> Mode: Role
+                                <?= ucfirst($role)?>
+                            </span>
+                        </div>
 
                         <div class="row g-3">
-                            <div class="col-md-12 mb-2">
+                            <div class="col-md-6 mb-2">
                                 <label class="form-label fw-700 small">Nama Instansi / Aplikasi</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-white border-end-0"><i
                                             class="bi bi-building text-muted"></i></span>
                                     <input type="text" name="app_name" class="form-control border-start-0 ps-0"
                                         value="<?= esc($app_name)?>" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label fw-700 small">Sidebar Subtitle</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0"><i
+                                            class="bi bi-fonts text-muted"></i></span>
+                                    <input type="text" name="app_subtitle" class="form-control border-start-0 ps-0"
+                                        value="<?= esc($app_subtitle ?? 'SISTEM SPASIAL')?>" required>
                                 </div>
                             </div>
 
@@ -87,7 +103,9 @@ endif; ?>
                         <h6 class="fw-800 text-primary text-uppercase mb-4"
                             style="font-size: 0.75rem; letter-spacing: 1px;">Visual & Tema</h6>
                         <div class="mb-0">
-                            <label class="form-label fw-700 small">Warna Utama (Primary Color)</label>
+                            <label class="form-label fw-700 small">Warna Utama (Primary Color) -
+                                <?= ucfirst($role)?>
+                            </label>
                             <div class="d-flex align-items-center gap-3">
                                 <input type="color" name="header_color"
                                     class="form-control form-control-color border-0 shadow-sm"
@@ -97,11 +115,12 @@ endif; ?>
                                 </span>
                             </div>
                             <small class="text-muted mt-2 d-block">Warna ini akan digunakan sebagai identitas visual
-                                utama aplikasi.</small>
+                                utama aplikasi khusus untuk akun Anda (
+                                <?= $role?>).
+                            </small>
                         </div>
                     </div>
 
-                    <!-- Section: Map Content -->
                     <div class="p-4 bg-light rounded-4 mb-4 border">
                         <h6 class="fw-800 text-primary text-uppercase mb-4"
                             style="font-size: 0.75rem; letter-spacing: 1px;">Konfigurasi Peta (GIS)</h6>

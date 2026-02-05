@@ -2,10 +2,12 @@
 <?php
 /** @var \CodeIgniter\View\View $this */
 $settingsModel = new \App\Models\SettingsModel();
-$appName = $settingsModel->getValue('app_name', 'Geotagging App');
-$appLogo = $settingsModel->getValue('app_logo', '');
-$headerColor = $settingsModel->getValue('header_color', '#0f172a');
 $role = session()->get('role');
+$appName = $settingsModel->getValueWithRole('app_name', $role, 'Geotagging App');
+$appLogo = $settingsModel->getValueWithRole('app_logo', $role, '');
+$headerColorGlobal = $settingsModel->getValue('header_color', '#0f172a');
+$headerColor = $settingsModel->getValueWithRole('header_color', $role, $headerColorGlobal);
+$appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'SISTEM SPASIAL');
 ?>
 <html lang="id">
 
@@ -37,24 +39,24 @@ $role = session()->get('role');
             --radius-xl: 1.25rem;
             --radius-2xl: 1.5rem;
 
-            /* Default Admin Theme (Deep Navy) */
-            --primary: #0f172a;
+            /* Dynamic Primary Color */
+            --primary: <?=esc($headerColor)?>;
             --primary-dark: #020617;
             --accent: #f59e0b;
             --bg-body: #f8fafc;
-            --sidebar-bg: #0f172a;
+            --sidebar-bg: <?=esc($headerColor)?>;
             --sidebar-text: #94a3b8;
             --sidebar-active: #ffffff;
             --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
 
-        /* Operator Theme Overrides */
+        /* Darken adjustments for background-aware roles */
+        body.role-admin {
+            --primary-dark: #020617;
+        }
+
         body.role-operator {
-            --primary: #0d9488;
-            --primary-dark: #0f766e;
-            --accent: #10b981;
-            --sidebar-bg: #115e59;
-            --sidebar-active: #ffffff;
+            --primary-dark: #0f172a;
         }
 
         body {
@@ -322,8 +324,9 @@ endif; ?>
                     <div class="fw-800 fs-5 lh-1 text-white">
                         <?= esc($appName)?>
                     </div>
-                    <div class="small fw-600 opacity-50 mt-1" style="font-size: 0.6rem; letter-spacing: 1px;">SISTEM
-                        SPASIAL</div>
+                    <div class="small fw-600 opacity-50 mt-1" style="font-size: 0.6rem; letter-spacing: 1px;">
+                        <?= esc($appSubtitle)?>
+                    </div>
                 </div>
             </div>
             <!-- Close button for mobile -->
@@ -349,6 +352,11 @@ endif; ?>
                 <i class="bi bi-layers"></i> <span>Kawasan Wilayah (RTRW)</span>
             </a>
 
+            <a href="<?= base_url('admin/settings')?>"
+                class="sidebar-link <?=(uri_string() == 'admin/settings') ? 'active' : ''?>">
+                <i class="bi bi-sliders2"></i> <span>System Configuration</span>
+            </a>
+
             <?php if ($role == 'admin'): ?>
             <div class="menu-label">Super Administrator</div>
             <a href="<?= base_url('admin/audit-logs')?>"
@@ -358,10 +366,6 @@ endif; ?>
             <a href="<?= base_url('admin/users')?>"
                 class="sidebar-link <?=(strpos(uri_string(), 'admin/users') !== false) ? 'active' : ''?>">
                 <i class="bi bi-people"></i> <span>Staff Management</span>
-            </a>
-            <a href="<?= base_url('admin/settings')?>"
-                class="sidebar-link <?=(uri_string() == 'admin/settings') ? 'active' : ''?>">
-                <i class="bi bi-sliders2"></i> <span>System Configuration</span>
             </a>
             <?php
 endif; ?>

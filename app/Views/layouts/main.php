@@ -2,9 +2,12 @@
 <?php
 /** @var \CodeIgniter\View\View $this */
 $settingsModel = new \App\Models\SettingsModel();
-$appName = $settingsModel->getValue('app_name', 'Geotagging App');
-$appLogo = $settingsModel->getValue('app_logo', '');
-$headerColor = $settingsModel->getValue('header_color', '#b6b7deff'); // Default to a modern indigo
+$role = session()->get('role'); // Use role if logged in, otherwise null
+$appName = $settingsModel->getValueWithRole('app_name', $role, 'Geotagging App');
+$appLogo = $settingsModel->getValueWithRole('app_logo', $role, '');
+$headerColorGlobal = $settingsModel->getValue('header_color', '#b6b7deff');
+$headerColor = $settingsModel->getValueWithRole('header_color', $role, $headerColorGlobal);
+$appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'Pusat Data Spasial');
 ?>
 <html lang="id">
 
@@ -27,7 +30,7 @@ $headerColor = $settingsModel->getValue('header_color', '#b6b7deff'); // Default
 
     <style>
         :root {
-            --primary: <?= esc($headerColor)?>;
+            --primary: <?=esc($headerColor)?>;
             --primary-dark: #4338ca;
             --primary-light: #818cf8;
             --secondary: #64748b;
@@ -317,7 +320,8 @@ endif; ?>
                     </div>
                     <div
                         style="font-size: 0.65rem; color: var(--secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-top: 4px;">
-                        Pusat Data Spasial</div>
+                        <?= esc($appSubtitle)?>
+                    </div>
                 </div>
             </a>
 

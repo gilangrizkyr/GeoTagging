@@ -68,7 +68,7 @@ endif; ?>
                             <span class="input-group-text bg-light border-end-0"><i
                                     class="bi bi-person-badge text-muted"></i></span>
                             <input type="text" name="username" class="form-control fw-600 border-start-0 ps-0"
-                                placeholder="Contoh: gilang_admin" required>
+                                placeholder="Contoh: GilangRizky" required>
                         </div>
                     </div>
 
