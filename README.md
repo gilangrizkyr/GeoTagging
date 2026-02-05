@@ -92,3 +92,4 @@ Informasi yang ditampilkan dalam aplikasi ini bersifat **indikatif** dan bukan m
 
 **Developed for DPMPTSP Kabupaten Tanah Bumbu**
 &copy; 2026 GeoTagging-v2 Team
+# GeoTagging-v2
