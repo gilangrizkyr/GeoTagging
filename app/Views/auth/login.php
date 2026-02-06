@@ -7,7 +7,6 @@ $appLogo = $settingsModel->getValue('app_logo', '');
 $headerColor = $settingsModel->getValue('header_color', '#0f172a');
 ?>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +26,6 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
             --primary-dark: #020617;
             --accent: #3b82f6;
         }
-
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: #f1f5f9;
@@ -41,7 +39,6 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
             margin: 0;
             overflow: hidden;
         }
-
         .login-card {
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
@@ -55,7 +52,6 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
             min-height: 600px;
             margin: 20px;
         }
-
         .login-sidebar {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             width: 50%;
@@ -67,7 +63,6 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
             position: relative;
             overflow: hidden;
         }
-
         .login-form {
             width: 50%;
             padding: 60px;
@@ -76,7 +71,6 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
             justify-content: center;
             background: white;
         }
-
         .circles {
             position: absolute;
             top: 0;
@@ -87,13 +81,11 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
             opacity: 0.1;
             pointer-events: none;
         }
-
         .circle {
             position: absolute;
             border-radius: 50%;
             border: 2px solid white;
         }
-
         .form-control {
             padding: 14px 18px;
             border-radius: 12px;
@@ -103,13 +95,11 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
             font-family: 'Inter', sans-serif;
             transition: all 0.3s ease;
         }
-
         .form-control:focus {
             background-color: white;
             border-color: var(--accent);
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
         }
-
         .btn-login {
             background: linear-gradient(to right, var(--primary), var(--primary-dark));
             border: none;
@@ -119,29 +109,24 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
             letter-spacing: 0.5px;
             transition: all 0.3s ease;
         }
-
         .btn-login:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.4);
             opacity: 0.95;
         }
-
         @media (max-width: 768px) {
             .login-sidebar {
                 display: none;
             }
-
             .login-form {
                 width: 100%;
                 padding: 40px;
             }
-
             .login-card {
                 min-height: auto;
                 border-radius: 20px;
             }
         }
-
         h2,
         h3,
         h4,
@@ -150,9 +135,7 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
         }
     </style>
 </head>
-
 <body>
-
     <div class="login-card">
         <div class="login-sidebar">
             <div class="circles">
@@ -188,13 +171,11 @@ endif; ?>
                 </div>
             </div>
         </div>
-
         <div class="login-form">
             <div class="mb-5">
                 <h3 class="fw-800 text-dark mb-1">Administrator Login</h3>
                 <p class="text-muted fw-500">Silakan masukkan kredensial untuk melanjutkan.</p>
             </div>
-
             <?php if (session()->getFlashdata('error')): ?>
             <div
                 class="alert alert-danger border-0 bg-danger bg-opacity-10 text-danger py-3 rounded-4 small mb-4 d-flex align-items-center">
@@ -205,7 +186,6 @@ endif; ?>
             </div>
             <?php
 endif; ?>
-
             <form action="<?= base_url('auth/attemptLogin')?>" method="post">
                 <div class="mb-4">
                     <label class="form-label small fw-800 text-uppercase text-muted mb-2"
@@ -230,7 +210,6 @@ endif; ?>
                     MASUK KE SISTEM <i class="bi bi-box-arrow-in-right ms-2"></i>
                 </button>
             </form>
-
             <div class="mt-auto pt-5 text-center">
                 <a href="<?= base_url()?>"
                     class="text-decoration-none text-muted small fw-700 hover-primary d-flex align-items-center justify-content-center gap-2">
@@ -239,7 +218,5 @@ endif; ?>
             </div>
         </div>
     </div>
-
 </body>
-
 </html>

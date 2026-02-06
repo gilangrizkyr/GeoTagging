@@ -19,23 +19,22 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'Pusat Da
     </title>
 
     <!-- Fonts & Assets -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:300,400,500,600,700,800|outfit:400,500,600,700"
+        rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
 
     <style>
         :root {
-            --primary: <?=esc($headerColor)?>;
-            --primary-dark: #4338ca;
-            --primary-light: #818cf8;
+            --primary: #3c4b64;
+            --primary-dark: #2c3e50;
+            --primary-light: #526684;
             --secondary: #64748b;
-            --accent: #f59e0b;
-            --bg-main: #f0f2f5;
+            --accent: #27ae60;
+            --accent-teal: #3db4c8;
+            --bg-main: #f8fafc;
 
             /* Modern Gradients */
             --grad-primary: linear-gradient(135deg, var(--primary), var(--primary-dark));
@@ -46,16 +45,116 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'Pusat Da
             --radius-2xl: 24px;
             --radius-xl: 18px;
 
-            --shadow-premium: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.04);
-            --shadow-glow: 0 20px 40px -10px rgba(99, 102, 241, 0.3);
+            /* Layered Shadows (Ambient Occlusion style) */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-glow: 0 10px 15px -3px rgba(60, 75, 100, 0.3);
+
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.4);
+            --glass-blur: blur(20px);
+
             --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --transition-smooth: all 0.3s ease;
+        }
+
+        @keyframes mesh-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .mesh-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #f8fafc, #f1f5f9, #e2e8f0, #f8fafc);
+            background-size: 400% 400%;
+            animation: mesh-animation 15s ease infinite;
+            opacity: 0.8;
+        }
+
+        .mesh-blob {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.15;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .blob-1 {
+            top: -100px;
+            right: -100px;
+            background: var(--primary);
+            animation: float 20s infinite alternate;
+        }
+
+        .blob-2 {
+            bottom: -200px;
+            left: -200px;
+            background: var(--accent);
+            animation: float 25s infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(100px, 100px);
+            }
+        }
+
+        @media (min-width: 992px) {
+
+            html,
+            body {
+                height: 100vh;
+                height: -webkit-fill-available;
+                overflow: hidden;
+            }
+
+            body {
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            }
+        }
+
+        @media (max-width: 991px) {
+
+            html,
+            body {
+                height: auto;
+                overflow: visible;
+            }
+
+            body {
+                display: block;
+                overflow: visible;
+            }
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-main);
+            background-color: transparent;
             color: #1e293b;
-            overflow-x: hidden;
             letter-spacing: -0.01em;
         }
 
@@ -83,13 +182,17 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'Pusat Da
 
         /* Navbar: Crystal Clear */
         .navbar {
-            background: rgba(255, 255, 255, 0.8) !important;
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 1rem 0;
+            background: var(--glass-bg) !important;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            border-radius: 20px;
+            padding: 0.6rem 0;
             z-index: 1050;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+            box-shadow: var(--shadow-premium);
+            margin: 16px 16px 8px 16px;
+            top: 16px;
+            transition: var(--transition-smooth);
         }
 
         .navbar-brand {
@@ -104,15 +207,11 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'Pusat Da
         }
 
         .brand-logo-container {
-            width: 48px;
-            height: 48px;
-            background: var(--grad-primary);
-            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            box-shadow: 0 8px 16px -4px rgba(99, 102, 241, 0.4);
+            color: var(--primary);
+            font-size: 2rem;
             transition: var(--transition-bounce);
         }
 
@@ -136,11 +235,11 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'Pusat Da
         }
 
         .btn-portal {
-            background: var(--grad-primary);
+            background: linear-gradient(135deg, var(--primary), #2c3e50);
             border: none;
             color: white !important;
             padding: 12px 32px !important;
-            border-radius: 14px;
+            border-radius: 12px;
             font-weight: 700;
             box-shadow: var(--shadow-glow);
             transition: var(--transition-bounce);
@@ -153,29 +252,68 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'Pusat Da
 
         /* App Container */
         .app-main-content {
-            height: calc(100vh - 88px);
-            padding: 24px;
+            padding: 8px 24px 24px 24px;
             display: flex;
             gap: 24px;
+        }
+
+        @media (min-width: 992px) {
+            .app-main-content {
+                flex: 1;
+                min-height: 0;
+                /* Critical for inner scrolling */
+                overflow: hidden;
+            }
+
+            /* Control visual order in desktop: panel left, map right */
+            .floating-panel {
+                order: 1;
+            }
+
+            .map-content-wrapper {
+                order: 2;
+            }
+        }
+
+        @media (max-width: 991px) {
+            .app-main-content {
+                display: block;
+                padding: 16px;
+            }
         }
 
         /* Elegant Sidebar */
         .floating-panel {
             width: 440px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
             border-radius: var(--radius-2xl);
-            border: 1px solid rgba(255, 255, 255, 0.7);
             box-shadow: var(--shadow-premium);
+            overflow: hidden;
+            z-index: 1000;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            max-height: calc(100vh - 160px);
+            animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             transition: var(--transition-bounce);
-            z-index: 1000;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         .panel-header {
-            padding: 32px;
+            padding: 20px;
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
             border-bottom: 1px solid rgba(0, 0, 0, 0.03);
             position: relative;
@@ -207,14 +345,29 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'Pusat Da
         }
 
         .panel-body {
-            padding: 32px;
+            padding: 20px;
             overflow-y: auto;
             flex-grow: 1;
-            scrollbar-width: none;
+            scrollbar-gutter: stable;
         }
 
+        /* Custom Scrollbar for Premium Feel */
         .panel-body::-webkit-scrollbar {
-            display: none;
+            width: 6px;
+        }
+
+        .panel-body::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .panel-body::-webkit-scrollbar-thumb {
+            background: rgba(60, 75, 100, 0.15);
+            border-radius: 10px;
+            transition: var(--transition-smooth);
+        }
+
+        .panel-body::-webkit-scrollbar-thumb:hover {
+            background: rgba(60, 75, 100, 0.3);
         }
 
         /* Map Frame: The Centerpiece */
@@ -266,20 +419,29 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'Pusat Da
                 flex-direction: column;
             }
 
-            .floating-panel {
-                position: fixed;
-                bottom: 20px;
-                left: 20px;
-                right: 20px;
-                width: auto;
-                height: 60vh;
-                transform: translateY(0);
-                box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.15);
+            .map-content-wrapper {
+                order: 1;
+                margin-bottom: 24px;
+                margin-top: 12px;
             }
 
             .map-frame {
-                height: 75vh;
+                height: 40vh;
                 border: 6px solid white;
+            }
+
+            .floating-panel {
+                order: 2;
+                position: relative;
+                bottom: auto;
+                left: auto;
+                right: auto;
+                width: 100%;
+                height: auto;
+                max-height: none;
+                transform: none;
+                box-shadow: var(--shadow-premium);
+                margin-bottom: 24px;
             }
         }
 
@@ -302,26 +464,21 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'Pusat Da
     <div class="bg-blob blob-1"></div>
     <div class="bg-blob blob-2"></div>
 
-    <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="mesh-background"></div>
+    <div class="mesh-blob blob-1"></div>
+    <div class="mesh-blob blob-2"></div>
+
+    <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container-fluid px-4 px-lg-5">
             <a class="navbar-brand" href="<?= base_url()?>">
                 <div class="brand-logo-container">
                     <?php if ($appLogo): ?>
-                    <img src="<?= base_url($appLogo)?>" alt="Logo" style="height: 28px;">
+                    <img src="<?= base_url($appLogo)?>" alt="Logo" style="height: 55px;">
                     <?php
 else: ?>
                     <i class="bi bi-geo-fill"></i>
                     <?php
 endif; ?>
-                </div>
-                <div class="ms-3">
-                    <div style="line-height: 1;">
-                        <?= esc($appName)?>
-                    </div>
-                    <div
-                        style="font-size: 0.65rem; color: var(--secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-top: 4px;">
-                        <?= esc($appSubtitle)?>
-                    </div>
                 </div>
             </a>
 
@@ -342,7 +499,6 @@ endif; ?>
         </div>
     </nav>
 
-    <div style="height: 88px;"></div>
 
     <div class="flex-grow-1 app-main-content">
         <?= $this->renderSection('content')?>
@@ -357,11 +513,10 @@ endif; ?>
                 Terintegratif</div>
         </div>
     </footer>
-
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>const baseUrl = "<?= base_url()?>";</script>
     <?= $this->renderSection('scripts')?>
 </body>
