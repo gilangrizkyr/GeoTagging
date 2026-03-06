@@ -1,35 +1,25 @@
-version: '3.8'
-
 services:
   app:
-    build: .
-    container_name: geotagging_app
-    ports:
-      - "8080:80"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: GeoTaggingApp
+    restart: unless-stopped
+    working_dir: /var/www/html
     volumes:
       - .:/var/www/html
-    environment:
-      CI_ENVIRONMENT: development
-      database.default.hostname: db
-      database.default.database: geotagging_db
-      database.default.username: postgres
-      database.default.password: postgres
-      database.default.DBDriver: Postgre
-      database.default.port: 5432
-    depends_on:
-      - db
-
-  db:
-    image: postgis/postgis:15-3.3
-    container_name: geotagging_db
-    environment:
-      POSTGRES_DB: geotagging_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      - /var/www/html/vendor
+      - app_writable:/var/www/html/writable
+      - app_uploads:/var/www/html/public/uploads
     ports:
-      - "5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
-
+      - "9008:80"
+    env_file:
+      - .env
+    networks:
+      - appnet
 volumes:
-  db_data:
+  app_writable:
+  app_uploads:
+networks:
+  mysql-net:
+    external: true

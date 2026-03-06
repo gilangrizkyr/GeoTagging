@@ -72,11 +72,91 @@ endif; ?>
                             </div>
 
                             <div class="col-md-12">
-                                <label class="form-label fw-700 small">Logo Utama Aplikasi</label>
+                                <label class="form-label fw-700 small mb-3 d-block text-muted">Logo Navbar (Maksimal 3 Upload)</label>
+                                <div class="row g-3">
+                                    <!-- Logo Navbar 1 -->
+                                    <div class="col-md-4">
+                                        <div class="p-3 bg-white border rounded-3">
+                                            <div class="text-center mb-3">
+                                                <div class="d-inline-block">
+                                                    <?php if ($logo_navbar_1): ?>
+                                                    <img src="<?= base_url($logo_navbar_1)?>" alt="Logo 1"
+                                                        class="rounded border p-1 bg-light" style="height: 50px;">
+                                                    <?php
+else: ?>
+                                                    <div class="rounded border bg-light d-flex align-items-center justify-content-center"
+                                                        style="width: 80px; height: 50px;">
+                                                        <i class="bi bi-image text-muted"></i>
+                                                    </div>
+                                                    <?php
+endif; ?>
+                                                </div>
+                                            </div>
+                                            <input type="file" name="logo_navbar_1" class="form-control form-control-sm"
+                                                accept="image/*">
+                                            <small class="text-muted d-block mt-2">Logo 1</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- Logo Navbar 2 -->
+                                    <div class="col-md-4">
+                                        <div class="p-3 bg-white border rounded-3">
+                                            <div class="text-center mb-3">
+                                                <div class="d-inline-block">
+                                                    <?php if ($logo_navbar_2): ?>
+                                                    <img src="<?= base_url($logo_navbar_2)?>" alt="Logo 2"
+                                                        class="rounded border p-1 bg-light" style="height: 50px;">
+                                                    <?php
+else: ?>
+                                                    <div class="rounded border bg-light d-flex align-items-center justify-content-center"
+                                                        style="width: 80px; height: 50px;">
+                                                        <i class="bi bi-image text-muted"></i>
+                                                    </div>
+                                                    <?php
+endif; ?>
+                                                </div>
+                                            </div>
+                                            <input type="file" name="logo_navbar_2" class="form-control form-control-sm"
+                                                accept="image/*">
+                                            <small class="text-muted d-block mt-2">Logo 2</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- Logo Navbar 3 -->
+                                    <div class="col-md-4">
+                                        <div class="p-3 bg-white border rounded-3">
+                                            <div class="text-center mb-3">
+                                                <div class="d-inline-block">
+                                                    <?php if ($logo_navbar_3): ?>
+                                                    <img src="<?= base_url($logo_navbar_3)?>" alt="Logo 3"
+                                                        class="rounded border p-1 bg-light" style="height: 50px;">
+                                                    <?php
+else: ?>
+                                                    <div class="rounded border bg-light d-flex align-items-center justify-content-center"
+                                                        style="width: 80px; height: 50px;">
+                                                        <i class="bi bi-image text-muted"></i>
+                                                    </div>
+                                                    <?php
+endif; ?>
+                                                </div>
+                                            </div>
+                                            <input type="file" name="logo_navbar_3" class="form-control form-control-sm"
+                                                accept="image/*">
+                                            <small class="text-muted d-block mt-2">Logo 3</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <small class="text-muted d-block mt-2"><i class="bi bi-info-circle me-1"></i>
+                                    Gunakan file PNG transparan untuk hasil terbaik (Max 2MB per file).</small>
+                            </div>
+
+                            <!-- Logo Sidebar -->
+                            <div class="col-md-12">
+                                <label class="form-label fw-700 small">Logo Sidebar</label>
                                 <div class="p-3 bg-white border rounded-3 d-flex align-items-center gap-4">
                                     <div class="avatar-preview">
-                                        <?php if ($app_logo): ?>
-                                        <img src="<?= base_url($app_logo)?>" alt="Logo"
+                                        <?php if ($logo_sidebar): ?>
+                                        <img src="<?= base_url($logo_sidebar)?>" alt="Logo Sidebar"
                                             class="rounded border p-1 bg-light" style="height: 60px;">
                                         <?php
 else: ?>
@@ -88,7 +168,33 @@ else: ?>
 endif; ?>
                                     </div>
                                     <div class="flex-grow-1">
-                                        <input type="file" name="app_logo_file" class="form-control form-control-sm"
+                                        <input type="file" name="logo_sidebar" class="form-control form-control-sm"
+                                            accept="image/*">
+                                        <small class="text-muted d-block mt-1">Gunakan file PNG transparan untuk hasil
+                                            terbaik (Max 2MB).</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Logo Login -->
+                            <div class="col-md-12">
+                                <label class="form-label fw-700 small">Logo Login</label>
+                                <div class="p-3 bg-white border rounded-3 d-flex align-items-center gap-4">
+                                    <div class="avatar-preview">
+                                        <?php if ($logo_login): ?>
+                                        <img src="<?= base_url($logo_login)?>" alt="Logo Login"
+                                            class="rounded border p-1 bg-light" style="height: 60px;">
+                                        <?php
+else: ?>
+                                        <div class="rounded border bg-light d-flex align-items-center justify-content-center"
+                                            style="width: 60px; height: 60px;">
+                                            <i class="bi bi-image text-muted"></i>
+                                        </div>
+                                        <?php
+endif; ?>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <input type="file" name="logo_login" class="form-control form-control-sm"
                                             accept="image/*">
                                         <small class="text-muted d-block mt-1">Gunakan file PNG transparan untuk hasil
                                             terbaik (Max 2MB).</small>

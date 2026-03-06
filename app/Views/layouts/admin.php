@@ -4,7 +4,7 @@
 $settingsModel = new \App\Models\SettingsModel();
 $role = session()->get('role');
 $appName = $settingsModel->getValueWithRole('app_name', $role, 'Geotagging App');
-$appLogo = $settingsModel->getValueWithRole('app_logo', $role, '');
+$logoSidebar = $settingsModel->getValueWithRole('logo_sidebar', $role, '');
 $headerColorGlobal = $settingsModel->getValue('header_color', '#0f172a');
 $headerColor = $settingsModel->getValueWithRole('header_color', $role, $headerColorGlobal);
 $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'SISTEM SPASIAL');
@@ -95,13 +95,16 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'SISTEM S
         }
 
         .sidebar-header {
-            padding: 1.5rem 1.5rem;
-            height: var(--topbar-height);
+            padding: 2rem 1.5rem;
+            height: auto;
             display: flex;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            overflow: hidden;
-            white-space: nowrap;
+            overflow: visible;
+            white-space: normal;
+            position: relative;
         }
 
         .sidebar-menu {
@@ -165,7 +168,21 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'SISTEM S
             width: var(--sidebar-collapsed-width);
         }
 
-        body.sidebar-compact .sidebar .sidebar-header .brand-text,
+        body.sidebar-compact .sidebar-header {
+            padding: 1.5rem 0.5rem;
+            height: auto;
+        }
+
+        body.sidebar-compact .sidebar-header .brand-text {
+            opacity: 0;
+            visibility: hidden;
+            display: none;
+        }
+
+        body.sidebar-compact .sidebar-header img {
+            height: 35px !important;
+        }
+
         body.sidebar-compact .sidebar .menu-label,
         body.sidebar-compact .sidebar .sidebar-link span {
             opacity: 0;
@@ -310,27 +327,27 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'SISTEM S
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <div class="d-flex align-items-center gap-3">
-                <div class="p-2 bg-white rounded-3 shadow-sm flex-shrink-0">
-                    <?php if ($appLogo): ?>
-                    <img src="<?= base_url($appLogo)?>" alt="Logo" style="height: 32px;">
-                    <?php
+            <div class="d-flex flex-column align-items-center gap-2 text-center">
+                <?php if ($logoSidebar): ?>
+                <img src="<?= base_url($logoSidebar)?>" alt="Logo" style="height: 50px; width: auto;">
+                <?php
 else: ?>
-                    <i class="bi bi-geo-fill text-primary fs-3"></i>
-                    <?php
-endif; ?>
+                <div class="flex-shrink-0">
+                    <i class="bi bi-geo-fill text-white fs-1"></i>
                 </div>
+                <?php
+endif; ?>
                 <div class="brand-text">
-                    <div class="fw-800 fs-5 lh-1 text-white">
+                    <div class="fw-800 fs-6 lh-1 text-white">
                         <?= esc($appName)?>
                     </div>
-                    <div class="small fw-600 opacity-50 mt-1" style="font-size: 0.6rem; letter-spacing: 1px;">
+                    <div class="small fw-600 opacity-75 mt-2" style="font-size: 0.65rem; letter-spacing: 0.5px;">
                         <?= esc($appSubtitle)?>
                     </div>
                 </div>
             </div>
             <!-- Close button for mobile -->
-            <button class="btn border-0 text-white ms-auto d-lg-none p-0" id="closeSidebar">
+            <button class="btn border-0 text-white ms-auto d-lg-none p-0 position-absolute end-0 top-0 m-2" id="closeSidebar">
                 <i class="bi bi-x-lg fs-4"></i>
             </button>
         </div>

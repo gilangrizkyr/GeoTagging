@@ -17,6 +17,6 @@ class AuditLogModel extends Model
     // Dates
     protected $useTimestamps = false;
     protected $dateFormat = 'datetime';
-    protected $createdField = 'created_at';
+    protected $createdField = 'search_time';
     protected $updatedField = 'updated_at';
 }

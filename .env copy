@@ -14,10 +14,10 @@ app.baseURL = 'http://localhost:8080'
 # DATABASE
 #--------------------------------------------------------------------
 
-database.default.hostname = localhost
+database.default.hostname = host.docker.internal
 database.default.database = geotagging_db
 database.default.username = postgres
-database.default.password = postgres
+database.default.password = 
 database.default.DBDriver = Postgre
 database.default.port = 5432
 
