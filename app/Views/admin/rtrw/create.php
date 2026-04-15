@@ -1,29 +1,29 @@
-<?php /** @var \CodeIgniter\View\View $this */?>
-<?php $this->extend('layouts/admin')?>
+<?php /** @var \CodeIgniter\View\View $this */ ?>
+<?php $this->extend('layouts/admin') ?>
 
-<?php $this->section('title')?>
+<?php $this->section('title') ?>
 Konfigurasi Kawasan RTRW Baru
-<?php $this->endSection()?>
+<?php $this->endSection() ?>
 
-<?php $this->section('content')?>
+<?php $this->section('content') ?>
 <div class="row justify-content-center">
     <div class="col-xl-8">
 
         <?php if (session()->getFlashdata('errors')): ?>
-        <div class="alert alert-danger border-0 shadow-sm rounded-4 p-3 mb-4">
-            <div class="fw-800 small text-uppercase mb-2"><i class="bi bi-exclamation-triangle-fill"></i> Terdapat
-                Kesalahan Input:</div>
-            <ul class="mb-0 small fw-600">
-                <?php foreach (session()->getFlashdata('errors') as $error): ?>
-                <li>
-                    <?= $error?>
-                </li>
-                <?php
-    endforeach ?>
-            </ul>
-        </div>
-        <?php
-endif; ?>
+            <div class="alert alert-danger border-0 shadow-sm rounded-4 p-3 mb-4">
+                <div class="fw-800 small text-uppercase mb-2"><i class="bi bi-exclamation-triangle-fill"></i> Terdapat
+                    Kesalahan Input:</div>
+                <ul class="mb-0 small fw-600">
+                    <?php foreach (session()->getFlashdata('errors') as $error): ?>
+                        <li>
+                            <?= $error ?>
+                        </li>
+                        <?php
+                    endforeach ?>
+                </ul>
+            </div>
+            <?php
+        endif; ?>
 
         <div class="card card-premium overflow-hidden">
             <div class="card-header bg-white py-4 px-4 border-0">
@@ -32,7 +32,7 @@ endif; ?>
                     makro.</p>
             </div>
             <div class="card-body p-4 p-lg-5 pt-2">
-                <form action="<?= base_url('admin/rtrw/store')?>" method="post" enctype="multipart/form-data">
+                <form action="<?= base_url('admin/rtrw/store') ?>" method="post" enctype="multipart/form-data">
 
                     <div class="row g-4 mb-4">
                         <div class="col-md-7">
@@ -54,7 +54,7 @@ endif; ?>
                                 <input type="color" name="color"
                                     class="form-control form-control-color border-0 shadow-sm" value="#ff8833"
                                     style="width: 50px; height: 40px;">
-                                <span class="small fw-800 text-muted">Pick Legend Color</span>
+                                <span class="small fw-800 text-muted">Pilih Warna Legenda</span>
                             </div>
                         </div>
                     </div>
@@ -91,12 +91,12 @@ endif; ?>
                         <button type="submit" class="btn btn-primary px-5 py-3 fw-800 rounded-3 shadow-lg flex-grow-1">
                             <i class="bi bi-shield-check me-2"></i> RESMIKAN DATA KAWASAN
                         </button>
-                        <a href="<?= base_url('admin/rtrw')?>"
-                            class="btn btn-light px-4 py-3 fw-700 rounded-3 border text-muted">CANCEL</a>
+                        <a href="<?= base_url('admin/rtrw') ?>"
+                            class="btn btn-light px-4 py-3 fw-700 rounded-3 border text-muted">BATAL</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<?php $this->endSection()?>
+<?php $this->endSection() ?>

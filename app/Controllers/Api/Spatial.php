@@ -29,7 +29,8 @@ class Spatial extends BaseController
 
         // Prepare Response
         $data = [
-            'coordinates' => ['lat' => $lat, 'lng' => $lng],
+            'coordinates' => ['lat' => (float) $lat, 'lng' => (float) $lng],
+            'match_type' => $rdtrResult ? ($rdtrResult['dist_m'] == 0 ? 'exact' : 'proximity') : 'none',
             'rdtr' => null,
             'rtrw' => $rtrwResult ? [
                 'nama_kawasan' => $rtrwResult['nama_kawasan'],
@@ -75,14 +76,15 @@ class Spatial extends BaseController
             'result_summary' => json_encode([
                 'rdtr_found' => !empty($rdtrResult),
                 'rtrw_found' => !empty($rtrwResult),
-                'rdtr_zona' => $rdtrResult['nama_zona'] ?? null
+                'rdtr_zona' => $rdtrResult['nama_zona'] ?? null,
+                'match_type' => $data['match_type']
             ]),
         ];
-        $auditModel->insert((object)$logData);
+        $auditModel->insert((object) $logData);
 
         return $this->respond([
             'status' => true,
-            'message' => 'success',
+            'message' => 'Data berhasil dianalisis.',
             'data' => $data
         ]);
     }
@@ -190,5 +192,77 @@ class Spatial extends BaseController
                 'validation_message' => $validation['message']
             ]
         ]);
+    }
+
+    /**
+     * Export individual analysis result to PDF
+     */
+    public function exportAnalysis()
+    {
+        $lat = $this->request->getVar('lat');
+        $lng = $this->request->getVar('lng');
+        $kbli = $this->request->getVar('kbli');
+
+        if (!$lat || !$lng) {
+            return redirect()->to(base_url())->with('error', 'Koordinat tidak ditemukan.');
+        }
+
+        $rdtrModel = new \App\Models\RdtrModel();
+        $rtrwModel = new \App\Models\RtrwModel();
+
+        $rdtrResult = $rdtrModel->checkLocation($lat, $lng);
+        $rtrwResult = $rtrwModel->checkLocation($lat, $lng);
+
+        if (!$rdtrResult && !$rtrwResult) {
+            return redirect()->to(base_url())->with('error', 'Lokasi tidak berada dalam cakupan wilayah tata ruang (RDTR/RTRW).');
+        }
+
+        $data = [
+            'lat' => $lat,
+            'lng' => $lng,
+            'match_type' => ($rdtrResult && $rdtrResult['dist_m'] == 0 ? 'exact' : 'proximity'),
+            'rdtr' => null,
+            'rtrw' => null
+        ];
+
+        if ($rdtrResult) {
+            $data['rdtr'] = [
+                'nama_zona' => $rdtrResult['nama_zona'],
+                'sub_zona' => $rdtrResult['sub_zona'],
+                'peruntukan' => $rdtrResult['peruntukan'],
+                'regulation_text' => $rdtrResult['regulation_text'],
+                'itbx' => [
+                    'kdb' => $rdtrResult['kdb'],
+                    'klb' => $rdtrResult['klb'],
+                    'kdh' => $rdtrResult['kdh'],
+                    'ktb' => $rdtrResult['ktb'],
+                    'ketinggian_max' => $rdtrResult['ketinggian_max'],
+                    'gsb' => $rdtrResult['gsb'],
+                    'gsl' => $rdtrResult['gsl'],
+                ]
+            ];
+        }
+
+        if ($rtrwResult) {
+            $data['rtrw'] = [
+                'nama_kawasan' => $rtrwResult['nama_kawasan'],
+                'fungsi_kawasan' => $rtrwResult['fungsi_kawasan']
+            ];
+        }
+
+        if ($kbli && $rdtrResult) {
+            helper('kbli');
+            $data['kbli_validation'] = [
+                'code' => $kbli,
+                'name' => \App\Helpers\KBLIHelper::getKBLIName($kbli),
+                'allowed' => \App\Helpers\KBLIHelper::validateKBLI($kbli, $rdtrResult['kbli_allowed'])['allowed']
+            ];
+        }
+
+        $settingsModel = new \App\Models\SettingsModel();
+        $data['app_name'] = $settingsModel->getValue('app_name', 'Geotagging App');
+        $data['app_logo'] = $settingsModel->getValue('logo_sidebar', '');
+
+        return view('spatial/analysis_report', $data);
     }
 }

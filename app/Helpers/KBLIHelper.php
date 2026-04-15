@@ -17,7 +17,7 @@ class KBLIHelper
         if (empty($allowedKBLI)) {
             return [
                 'allowed' => true,
-                'message' => 'Zona ini tidak memiliki pembatasan KBLI khusus.'
+                'message' => 'Zona ini terbuka untuk semua jenis kegiatan (TIDAK ada pembatasan KBLI).'
             ];
         }
 
@@ -28,31 +28,22 @@ class KBLIHelper
         if (in_array($kbliCode, $allowedCodes)) {
             return [
                 'allowed' => true,
-                'message' => 'KBLI ' . $kbliCode . ' diizinkan di zona ini.'
+                'message' => 'Kegiatan dengan kode KBLI ' . $kbliCode . ' SESUAI dengan peruntukan zona ini.'
             ];
         }
 
         return [
             'allowed' => false,
-            'message' => 'KBLI ' . $kbliCode . ' TIDAK diizinkan di zona ini. KBLI yang diizinkan: ' . $allowedKBLI
+            'message' => 'Maaf, kegiatan ' . $kbliCode . ' TIDAK diizinkan di zona ini berdasarkan aturan RDTR terbaru.'
         ];
     }
 
     /**
-     * Get KBLI category name (simplified reference)
-     * In production, this should query a KBLI reference database
+     * Get KBLI category name from config
      */
     public static function getKBLIName(string $kbliCode): string
     {
-        $kbliReference = [
-            '46311' => 'Perdagangan Besar Beras',
-            '47711' => 'Perdagangan Eceran Pakaian',
-            '56101' => 'Restoran',
-            '68100' => 'Real Estat',
-            '85101' => 'Pendidikan Anak Usia Dini',
-            // Add more as needed
-        ];
-
-        return $kbliReference[$kbliCode] ?? 'KBLI ' . $kbliCode;
+        $config = config('KBLI');
+        return $config->reference[$kbliCode] ?? 'KBLI ' . $kbliCode;
     }
 }

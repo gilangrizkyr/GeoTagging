@@ -2,556 +2,538 @@
 
 <?php $this->section('styles') ?>
 <style>
-    /* ===== HOME PAGE ===== */
-    .home-page-container {
+    /* ===== PREMIUM HOME PAGE ===== */
+    .home-page-wrapper {
         max-width: 1400px;
-        margin: 0 auto;
+        /* Synchronized max-width */
         width: 100%;
-        padding-bottom: 40px;
+        margin: 0 auto;
+        padding: 40px 0;
+        /* No horizontal padding here, use layout padding */
+        position: relative;
     }
 
-    /* --- Hero --- */
-    .hero-section {
-        background: linear-gradient(135deg, rgba(30, 60, 114, 0.08) 0%, rgba(42, 82, 152, 0.06) 100%);
-        border-radius: 20px;
-        padding: 36px 32px;
-        margin-bottom: 32px;
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        backdrop-filter: blur(10px);
+    /* --- Asymmetric Hero --- */
+    .hero-container {
+        display: grid;
+        grid-template-columns: 0.75fr 1.25fr;
+        gap: 40px;
+        align-items: center;
+        padding: 60px 32px;
+        /* Internal content padding - matches navbar 2rem */
+        background: rgba(255, 255, 255, 0.45);
+        border-radius: 48px;
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        margin-bottom: 60px;
+        position: relative;
+        overflow: visible;
+        /* Allow decorative elements to pop out */
+        box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.08);
     }
 
-    .hero-section h1 {
-        font-size: 2.4rem;
+    /* Decorative Floating Elements */
+    .hero-badge {
+        position: absolute;
+        background: var(--glass-bg);
+        backdrop-filter: var(--glass-blur);
+        border: 1px solid var(--glass-border);
+        padding: 16px 24px;
+        border-radius: 24px;
+        box-shadow: var(--shadow-premium);
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: float 5s infinite alternate ease-in-out;
+    }
+
+    .badge-top {
+        top: -20px;
+        right: 10%;
+        animation-delay: 0.5s;
+    }
+
+    .badge-bottom {
+        bottom: -30px;
+        left: 5%;
+        animation-delay: 1s;
+    }
+
+    .hero-content h1 {
+        font-size: 4.2rem;
         font-weight: 900;
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        line-height: 0.95;
+        margin-bottom: 30px;
+        color: var(--primary-dark);
+        letter-spacing: -3px;
+    }
+
+    .hero-content h1 span {
+        display: block;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--accent-teal) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        background-clip: text;
-        line-height: 1.2;
-        margin-bottom: 10px;
     }
 
-    .hero-section p {
-        font-size: 1rem;
-        color: #64748b;
+    .hero-content p {
+        font-size: 1.3rem;
+        color: #475569;
         font-weight: 600;
-        margin: 0;
+        margin-bottom: 45px;
+        line-height: 1.6;
+        max-width: 550px;
     }
 
-    /* --- Stat Cards --- */
-    .stat-card {
-        background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
-        border-radius: 16px;
-        padding: 24px 20px;
-        border: 1px solid rgba(255, 255, 255, 0.7);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
-        transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-        backdrop-filter: blur(10px);
-        height: 100%;
+    .hero-visual {
+        position: relative;
         display: flex;
-        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+        height: 500px;
+        /* Fixed height for slider area */
     }
 
-    .stat-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.11);
-        border-color: rgba(30, 60, 114, 0.15);
+    .hero-slider-wrapper {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        z-index: 10;
+        border-radius: 60px;
+        /* Matching the creative frame radius */
+        overflow: hidden;
+        border: 8px solid rgba(255, 255, 255, 0.5);
+        /* Premium Frame Box */
+        box-shadow:
+            0 30px 60px rgba(0, 0, 0, 0.1),
+            inset 0 0 20px rgba(0, 0, 0, 0.05);
+        backdrop-filter: blur(5px);
     }
 
-    .stat-icon {
-        width: 56px;
-        height: 56px;
-        border-radius: 14px;
+    .hero-slider-wrapper img {
+        animation: none !important;
+        /* Disable floating for slider images */
+    }
+
+    .carousel-item {
+        transition: transform 1.2s ease-in-out, opacity 1.2s ease-in-out;
+    }
+
+    /* --- Premium Stat Cards --- */
+    .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 24px;
+        margin-bottom: 50px;
+    }
+
+    .premium-stat-card {
+        background: var(--glass-bg);
+        border-radius: var(--radius-2xl);
+        padding: 30px;
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--shadow-premium);
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        text-align: left;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .premium-stat-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.15);
+    }
+
+    .premium-stat-card::after {
+        content: '';
+        position: absolute;
+        bottom: -20px;
+        right: -20px;
+        width: 80px;
+        height: 80px;
+        background: var(--primary);
+        opacity: 0.03;
+        border-radius: 50%;
+    }
+
+    .stat-icon-box {
+        width: 64px;
+        height: 64px;
+        border-radius: var(--radius-lg);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.7rem;
-        margin-bottom: 16px;
-        flex-shrink: 0;
+        font-size: 1.8rem;
+        margin-bottom: 24px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
     }
 
-    .stat-icon.rdtr  { background: linear-gradient(135deg, rgba(30,60,114,0.15), rgba(42,82,152,0.08)); color: #1e3c72; }
-    .stat-icon.rtrw  { background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.08)); color: #f59e0b; }
-    .stat-icon.search{ background: linear-gradient(135deg, rgba(39,174,96,0.15), rgba(39,174,96,0.08)); color: #27ae60; }
-    .stat-icon.avg   { background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(99,102,241,0.08)); color: #6366f1; }
-
-    .stat-number {
-        font-size: 2rem;
+    .stat-val {
+        font-size: 2.5rem;
         font-weight: 900;
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
         line-height: 1;
-        margin-bottom: 6px;
+        color: var(--primary);
+        margin-bottom: 8px;
     }
 
-    .stat-label {
-        font-size: 0.9rem;
-        font-weight: 700;
+    .stat-tit {
+        font-size: 1rem;
+        font-weight: 800;
         color: #334155;
         margin-bottom: 4px;
     }
 
-    .stat-sub {
-        font-size: 0.78rem;
+    .stat-des {
+        font-size: 0.8rem;
+        font-weight: 600;
         color: #94a3b8;
-        font-weight: 500;
-        margin-top: auto;
     }
 
-    /* --- Content Cards --- */
-    .content-card {
-        background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
-        border-radius: 18px;
-        padding: 26px 24px;
-        border: 1px solid rgba(255, 255, 255, 0.7);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
-        backdrop-filter: blur(10px);
-        transition: box-shadow 0.3s ease;
+    /* Colors */
+    .icon-rdtr {
+        background: rgba(30, 60, 114, 0.08);
+        color: var(--primary);
+    }
+
+    .icon-rtrw {
+        background: rgba(245, 158, 11, 0.08);
+        color: var(--accent-amber);
+    }
+
+    .icon-search {
+        background: rgba(39, 174, 96, 0.08);
+        color: var(--accent);
+    }
+
+    .icon-trend {
+        background: rgba(6, 182, 212, 0.08);
+        color: var(--accent-teal);
+    }
+
+    /* --- Section Styling --- */
+    .glass-section-card {
+        background: var(--glass-bg);
+        border-radius: var(--radius-2xl);
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--shadow-premium);
+        padding: 35px;
         height: 100%;
     }
 
-    .content-card:hover {
-        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
-    }
-
-    .section-title {
-        font-size: 1.1rem;
-        font-weight: 800;
-        color: #1e293b;
-        margin-bottom: 20px;
+    .section-header {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding-bottom: 14px;
-        border-bottom: 2px solid rgba(30, 60, 114, 0.08);
+        gap: 15px;
+        margin-bottom: 30px;
     }
 
-    .section-title i {
-        font-size: 1.1rem;
-        color: #1e3c72;
-        background: rgba(30,60,114,0.1);
-        width: 34px;
-        height: 34px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-
-    /* --- Peruntukan List --- */
-    .peruntukan-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px 0;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-    }
-
-    .peruntukan-item:last-child { border-bottom: none; }
-
-    .peruntukan-rank {
-        width: 26px;
-        height: 26px;
-        border-radius: 8px;
-        background: rgba(30, 60, 114, 0.1);
-        color: #1e3c72;
-        font-size: 0.75rem;
-        font-weight: 800;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-
-    .peruntukan-name {
-        flex: 1;
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: #334155;
-        min-width: 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .peruntukan-count {
-        font-weight: 800;
-        color: #1e3c72;
-        font-size: 1rem;
-        flex-shrink: 0;
-    }
-
-    .progress-bar-custom {
-        height: 6px;
-        border-radius: 6px;
-        background: rgba(0, 0, 0, 0.05);
-        overflow: hidden;
-        margin-top: 4px;
-    }
-
-    .progress-bar-custom .bar {
-        height: 100%;
-        background: linear-gradient(90deg, #1e3c72 0%, #2a5298 60%, #3b82f6 100%);
-        border-radius: 6px;
-        transition: width 0.6s ease;
-    }
-
-    /* --- Chart --- */
-    .chart-container {
-        position: relative;
-        height: 260px;
-    }
-
-    /* --- Info Tiles --- */
-    .info-tile {
-        border-radius: 14px;
-        padding: 20px 16px;
-        text-align: center;
-        transition: transform 0.3s ease;
-    }
-
-    .info-tile:hover { transform: translateY(-3px); }
-
-    .info-tile .tile-number {
-        font-size: 1.8rem;
-        font-weight: 900;
-        line-height: 1;
-        margin-bottom: 6px;
-    }
-
-    .info-tile .tile-label {
-        font-size: 0.78rem;
-        font-weight: 600;
-        color: #64748b;
-    }
-
-    /* --- Quick Links --- */
-    .quick-link {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 14px 16px;
+    .section-header i {
+        width: 45px;
+        height: 45px;
         border-radius: 12px;
-        background: rgba(30, 60, 114, 0.04);
-        border: 1px solid rgba(30, 60, 114, 0.08);
-        text-decoration: none;
-        color: #1e293b;
-        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        margin-bottom: 10px;
-    }
-
-    .quick-link:last-child { margin-bottom: 0; }
-
-    .quick-link:hover {
         background: rgba(30, 60, 114, 0.1);
-        border-color: rgba(30, 60, 114, 0.2);
-        transform: translateX(4px);
-        color: #1e3c72;
-    }
-
-    .quick-link-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
+        color: var(--primary);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
+    }
+
+    .section-header h4 {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--primary-dark);
+    }
+
+    /* --- List Ranking --- */
+    .rank-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 15px;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        margin-bottom: 8px;
+    }
+
+    .rank-item:hover {
+        background: rgba(0, 0, 0, 0.02);
+    }
+
+    .rank-number {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        background: var(--primary);
+        color: white;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         flex-shrink: 0;
     }
 
-    .quick-link-text strong {
-        display: block;
-        font-size: 0.88rem;
+    .rank-info {
+        flex: 1;
+    }
+
+    .rank-name {
         font-weight: 700;
+        font-size: 0.95rem;
+        color: #1e293b;
     }
 
-    .quick-link-text small {
-        font-size: 0.75rem;
-        color: #94a3b8;
+    .rank-bar {
+        height: 6px;
+        background: rgba(0, 0, 0, 0.04);
+        border-radius: 6px;
+        margin-top: 8px;
+        overflow: hidden;
     }
 
-    /* --- CTA --- */
-    .cta-section {
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        border-radius: 18px;
-        padding: 36px 28px;
+    .rank-bar-fill {
+        height: 100%;
+        background: var(--primary);
+        border-radius: 6px;
+    }
+
+    .rank-val {
+        font-weight: 900;
+        color: var(--primary);
+        font-size: 1.1rem;
+    }
+
+    /* --- CTA Glass --- */
+    .main-cta {
+        margin-top: 60px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        border-radius: var(--radius-3xl);
+        padding: 60px 40px;
         text-align: center;
         color: white;
-        margin-top: 32px;
-        box-shadow: 0 16px 40px rgba(30, 60, 114, 0.25);
+        box-shadow: 0 25px 50px -12px rgba(30, 60, 114, 0.4);
+        position: relative;
+        overflow: hidden;
     }
 
-    .cta-section h2 {
-        font-size: 1.7rem;
-        font-weight: 900;
-        margin-bottom: 10px;
-    }
-
-    .cta-section p {
-        font-size: 0.95rem;
-        margin-bottom: 22px;
-        opacity: 0.9;
-    }
-
-    .btn-explore {
+    .cta-btn {
         background: white;
-        color: #1e3c72;
-        padding: 13px 36px;
-        border-radius: 10px;
+        color: var(--primary);
+        padding: 16px 40px;
+        border-radius: 16px;
         font-weight: 800;
-        border: none;
-        transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-        display: inline-block;
+        font-size: 1.1rem;
         text-decoration: none;
-        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        margin-top: 25px;
     }
 
-    .btn-explore:hover {
-        transform: translateY(-3px) scale(1.04);
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
-        color: #1e3c72;
+    .cta-btn:hover {
+        transform: scale(1.05) translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        color: var(--primary-dark);
     }
 
-    .empty-state {
-        text-align: center;
-        padding: 36px 20px;
-        color: #94a3b8;
-    }
-
-    .empty-state i {
-        font-size: 2.5rem;
-        color: #cbd5e1;
-        display: block;
-        margin-bottom: 12px;
-    }
-
-    /* --- Responsive --- */
     @media (max-width: 991px) {
-        .hero-section { padding: 28px 20px; margin-bottom: 24px; }
-        .hero-section h1 { font-size: 1.8rem; }
-        .stat-card { padding: 20px 16px; }
-        .stat-number { font-size: 1.7rem; }
-        .stat-icon { width: 48px; height: 48px; font-size: 1.5rem; }
-        .content-card { padding: 20px 18px; }
-        .cta-section { padding: 28px 20px; }
-        .cta-section h2 { font-size: 1.4rem; }
+        .home-page-wrapper {
+            padding: 20px 15px;
+        }
+
+        .hero-container {
+            grid-template-columns: 1fr;
+            padding: 40px 24px;
+            text-align: center;
+            border-radius: 32px;
+            margin-bottom: 40px;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            letter-spacing: -1.5px;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            margin: 0 auto 30px auto;
+        }
+
+        .hero-visual {
+            height: 350px;
+            /* Shorter on mobile */
+        }
+
+        .hero-slider-wrapper {
+            border-radius: 40px;
+            border-width: 4px;
+        }
     }
 
-    @media (max-width: 576px) {
-        .hero-section { padding: 20px 16px; margin-bottom: 20px; }
-        .hero-section h1 { font-size: 1.4rem; }
-        .hero-section p { font-size: 0.85rem; }
-        .stat-number { font-size: 1.4rem; }
-        .stat-icon { width: 44px; height: 44px; font-size: 1.3rem; margin-bottom: 12px; }
-        .content-card { padding: 16px 14px; }
-        .section-title { font-size: 0.95rem; }
-        .chart-container { height: 220px; }
-        .cta-section { padding: 24px 16px; margin-top: 24px; }
-        .cta-section h2 { font-size: 1.15rem; }
-        .btn-explore { padding: 11px 28px; font-size: 0.88rem; }
+    @media (max-width: 480px) {
+        .hero-content h1 {
+            font-size: 2.1rem;
+        }
+
+        .hero-visual {
+            height: 280px;
+        }
     }
 </style>
 <?php $this->endSection() ?>
 
 <?php $this->section('content') ?>
 
-<div class="home-page-container">
+<div class="home-page-wrapper">
 
-    <!-- Hero -->
-    <div class="hero-section">
-        <h1>Selamat Datang di GeoTagging</h1>
-        <p>Sistem Informasi Geografis Tata Ruang Tanah Bumbu &mdash; Analisis spasial untuk investasi yang transparan</p>
+    <!-- Hero asimetris -->
+    <div class="hero-container">
+        <!-- Decorative Floating Badges -->
+        <div class="hero-badge badge-top">
+            <i class="bi bi-patch-check-fill text-primary" style="font-size: 1.5rem;"></i>
+           <div class="d-flex flex-column">
+                <span class="fw-800 text-dark" style="font-size: 0.85rem; line-height: 1.1;">Analisis Instan</span>
+                <span class="small text-muted fw-600" style="font-size: 0.7rem;">Hasil Real-time RDTR & RTRW</span>
+            </div>
+        </div>
+        <!-- <div class="hero-badge badge-bottom">
+            <i class="bi bi-lightning-charge-fill text-warning" style="font-size: 1.5rem;"></i>
+            <div class="d-flex flex-column">
+                <span class="fw-800 text-dark" style="font-size: 0.85rem; line-height: 1.1;">Analisis Instan</span>
+                <span class="small text-muted fw-600" style="font-size: 0.7rem;">Hasil Real-time RDTR & RTRW</span>
+            </div>
+        </div> -->
+
+        <div class="hero-content">
+            <h1>Transparansi <span>Tata Ruang</span> Tanah Bumbu</h1>
+            <p>Pusat data spasial terpadu untuk pemantauan rencana tata ruang, analisis investasi,
+                dan keterbukaan informasi publik Kabupaten Tanah Bumbu.</p>
+            <div class="d-flex gap-3 justify-content-center justify-content-lg-start">
+                <a href="<?= base_url('map') ?>"
+                    class="btn btn-lg btn-primary rounded-pill px-5 py-3 fw-800 shadow-lg border-0">
+                    Mulai Jelajah <i class="bi bi-arrow-right-short"></i>
+                </a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-slider-wrapper">
+                <?php if (!empty($heroImages)): ?>
+                    <div id="heroCarousel" class="carousel slide carousel-fade h-100" data-bs-ride="carousel"
+                        data-bs-interval="<?= $heroSlideInterval ?>">
+                        <div class="carousel-inner h-100">
+                            <?php foreach ($heroImages as $i => $img): ?>
+                                <div class="carousel-item <?= $i === 0 ? 'active' : '' ?> h-100">
+                                    <img src="<?= base_url($img['image_path']) ?>" class="d-block w-100 h-100"
+                                        style="object-fit: cover;" alt="Hero Image <?= $i + 1 ?>">
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php if (count($heroImages) > 1): ?>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                <?php else: ?>
+                    <img src="<?= base_url('img/hero-ornament.png') ?>" alt="Spatial Data Visualization">
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
 
-    <!-- Stat Cards Row -->
-    <div class="row g-3 mb-4">
-        <div class="col-6 col-lg-3">
-            <div class="stat-card">
-                <div class="stat-icon rdtr"><i class="bi bi-grid-3x3-gap-fill"></i></div>
-                <div class="stat-number"><?= number_format($totalRdtr) ?></div>
-                <div class="stat-label">Zona RDTR</div>
-                <div class="stat-sub">Rencana Detail Tata Ruang</div>
-            </div>
+    <!-- Stat Grid -->
+    <div class="stat-grid">
+        <div class="premium-stat-card">
+            <div class="stat-icon-box icon-rdtr"><i class="bi bi-grid-3x3-gap-fill"></i></div>
+            <div class="stat-val"><?= number_format($totalRdtr) ?></div>
+            <div class="stat-tit">Zona RDTR</div>
+            <div class="stat-des">Rencana Detail Tata Ruang</div>
         </div>
-        <div class="col-6 col-lg-3">
-            <div class="stat-card">
-                <div class="stat-icon rtrw"><i class="bi bi-map-fill"></i></div>
-                <div class="stat-number"><?= number_format($totalRtrw) ?></div>
-                <div class="stat-label">Kawasan RTRW</div>
-                <div class="stat-sub">Rencana Tata Ruang Wilayah</div>
-            </div>
+        <div class="premium-stat-card">
+            <div class="stat-icon-box icon-rtrw"><i class="bi bi-map-fill"></i></div>
+            <div class="stat-val"><?= number_format($totalRtrw) ?></div>
+            <div class="stat-tit">Kawasan RTRW</div>
+            <div class="stat-des">Tata Ruang Wilayah</div>
         </div>
-        <div class="col-6 col-lg-3">
-            <div class="stat-card">
-                <div class="stat-icon search"><i class="bi bi-search"></i></div>
-                <div class="stat-number"><?= number_format($totalSearches) ?></div>
-                <div class="stat-label">Total Pencarian</div>
-                <div class="stat-sub">Analisis spasial dilakukan</div>
-            </div>
+        <div class="premium-stat-card">
+            <div class="stat-icon-box icon-search"><i class="bi bi-search"></i></div>
+            <div class="stat-val"><?= number_format($totalSearches) ?></div>
+            <div class="stat-tit">Analisis Spasial</div>
+            <div class="stat-des">Total Pencarian Data</div>
         </div>
-        <div class="col-6 col-lg-3">
-            <div class="stat-card">
-                <div class="stat-icon avg"><i class="bi bi-graph-up-arrow"></i></div>
-                <div class="stat-number"><?= $avgSearchesPerDay ?></div>
-                <div class="stat-label">Pencarian / Hari</div>
-                <div class="stat-sub">Rata-rata 7 hari terakhir</div>
-            </div>
+        <div class="premium-stat-card">
+            <div class="stat-icon-box icon-trend"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="stat-val"><?= $avgSearchesPerDay ?></div>
+            <div class="stat-tit">Tren Harian</div>
+            <div class="stat-des">Akses Rata-rata 7 Hari</div>
         </div>
     </div>
 
-    <!-- Main Content: 2 Columns -->
-    <div class="row g-4 align-items-stretch">
-
-        <!-- LEFT: Top Peruntukan + Chart -->
-        <div class="col-12 col-lg-7 d-flex flex-column gap-4">
-
-            <!-- Top Peruntukan -->
-            <div class="content-card">
-                <div class="section-title">
-                    <i class="bi bi-bar-chart-fill"></i> Top Peruntukan Zona
+    <div class="row g-4 mb-5">
+        <div class="col-lg-7">
+            <div class="glass-section-card">
+                <div class="section-header">
+                    <i class="bi bi-bar-chart-fill"></i>
+                    <h4>Pemanfaatan Ruang Tertinggi</h4>
                 </div>
 
                 <?php if (!empty($topPeruntukan)): ?>
-                    <?php $maxCount = max(array_column($topPeruntukan, 'jumlah')); ?>
-                    <div class="peruntukan-list">
-                        <?php foreach ($topPeruntukan as $idx => $item):
-                            $percentage = ($item['jumlah'] / $maxCount) * 100;
-                        ?>
-                            <div class="peruntukan-item">
-                                <div class="peruntukan-rank"><?= $idx + 1 ?></div>
-                                <div class="flex-fill min-width-0">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="peruntukan-name"><?= esc($item['peruntukan']) ?></span>
-                                        <span class="peruntukan-count ms-2"><?= number_format($item['jumlah']) ?></span>
+                    <?php $maxVal = max(array_column($topPeruntukan, 'jumlah')); ?>
+                    <div class="rank-list">
+                        <?php foreach ($topPeruntukan as $i => $it):
+                            $pct = ($it['jumlah'] / $maxVal) * 100;
+                            ?>
+                            <div class="rank-item">
+                                <div class="rank-number"><?= $i + 1 ?></div>
+                                <div class="rank-info">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="rank-name"><?= esc($it['peruntukan']) ?></span>
+                                        <span class="rank-val"><?= number_format($it['jumlah']) ?></span>
                                     </div>
-                                    <div class="progress-bar-custom mt-1">
-                                        <div class="bar" style="width: <?= $percentage ?>%"></div>
+                                    <div class="rank-bar">
+                                        <div class="rank-bar-fill" style="width: <?= $pct ?>%"></div>
                                     </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
                     </div>
                 <?php else: ?>
-                    <div class="empty-state">
-                        <i class="bi bi-info-circle"></i>
-                        <p>Belum ada data peruntukan zona</p>
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-inbox-fill mb-3" style="font-size: 3rem; opacity: 0.3;"></i>
+                        <p class="fw-600">Belum ada data analisis terkumpul</p>
                     </div>
                 <?php endif; ?>
             </div>
-
-            <!-- Distribusi Chart -->
-            <div class="content-card">
-                <div class="section-title">
-                    <i class="bi bi-pie-chart-fill"></i> Distribusi Zona RDTR
-                </div>
-                <div class="chart-container">
-                    <canvas id="peruntukkanChart"></canvas>
-                </div>
-            </div>
-
         </div>
-
-        <!-- RIGHT: Info + Quick Links -->
-        <div class="col-12 col-lg-5 d-flex flex-column gap-4">
-
-            <!-- Info Tiles -->
-            <div class="content-card">
-                <div class="section-title">
-                    <i class="bi bi-info-circle-fill"></i> Ringkasan Data
+        <div class="col-lg-5">
+            <div class="glass-section-card">
+                <div class="section-header">
+                    <i class="bi bi-pie-chart-fill"></i>
+                    <h4>Proporsi Zona RDTR</h4>
                 </div>
-                <div class="row g-3">
-                    <div class="col-6">
-                        <div class="info-tile" style="background: rgba(30,60,114,0.07);">
-                            <div class="tile-number" style="color: #1e3c72;"><?= number_format($totalRdtr / max(1, $totalRtrw), 2) ?></div>
-                            <div class="tile-label">Rasio RDTR : RTRW</div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="info-tile" style="background: rgba(245,158,11,0.08);">
-                            <div class="tile-number" style="color: #f59e0b;"><?= count($rdtrByPeruntukan) ?></div>
-                            <div class="tile-label">Jenis Peruntukan</div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="info-tile" style="background: rgba(39,174,96,0.08);">
-                            <div class="tile-number" style="color: #27ae60;"><?= number_format($totalSearches) ?></div>
-                            <div class="tile-label">Total Analisis</div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="info-tile" style="background: rgba(99,102,241,0.08);">
-                            <div class="tile-number" style="color: #6366f1;"><?= $avgSearchesPerDay ?></div>
-                            <div class="tile-label">Avg. / Hari</div>
-                        </div>
-                    </div>
+                <div style="height: 350px;">
+                    <canvas id="distChart"></canvas>
                 </div>
             </div>
-
-            <!-- Quick Links -->
-            <div class="content-card">
-                <div class="section-title">
-                    <i class="bi bi-lightning-charge-fill"></i> Akses Cepat
-                </div>
-
-                <a href="<?= base_url('map') ?>" class="quick-link">
-                    <div class="quick-link-icon" style="background: rgba(30,60,114,0.12); color: #1e3c72;">
-                        <i class="bi bi-map-fill"></i>
-                    </div>
-                    <div class="quick-link-text">
-                        <strong>Peta Interaktif</strong>
-                        <small>Klik koordinat untuk analisis tata ruang</small>
-                    </div>
-                    <i class="bi bi-chevron-right ms-auto text-muted"></i>
-                </a>
-
-                <a href="<?= base_url('map') ?>?layer=rdtr" class="quick-link">
-                    <div class="quick-link-icon" style="background: rgba(99,102,241,0.12); color: #6366f1;">
-                        <i class="bi bi-grid-3x3-gap-fill"></i>
-                    </div>
-                    <div class="quick-link-text">
-                        <strong>Layer RDTR</strong>
-                        <small>Lihat zona rencana detail tata ruang</small>
-                    </div>
-                    <i class="bi bi-chevron-right ms-auto text-muted"></i>
-                </a>
-
-                <a href="<?= base_url('map') ?>?layer=rtrw" class="quick-link">
-                    <div class="quick-link-icon" style="background: rgba(245,158,11,0.12); color: #f59e0b;">
-                        <i class="bi bi-layers-fill"></i>
-                    </div>
-                    <div class="quick-link-text">
-                        <strong>Layer RTRW</strong>
-                        <small>Lihat kawasan tata ruang wilayah</small>
-                    </div>
-                    <i class="bi bi-chevron-right ms-auto text-muted"></i>
-                </a>
-
-                <a href="<?= base_url('auth/login') ?>" class="quick-link">
-                    <div class="quick-link-icon" style="background: rgba(39,174,96,0.12); color: #27ae60;">
-                        <i class="bi bi-shield-lock-fill"></i>
-                    </div>
-                    <div class="quick-link-text">
-                        <strong>Portal Petugas</strong>
-                        <small>Login ke dashboard admin</small>
-                    </div>
-                    <i class="bi bi-chevron-right ms-auto text-muted"></i>
-                </a>
-            </div>
-
         </div>
-
     </div>
 
-    <!-- CTA -->
-    <div class="cta-section">
-        <h2>🗺️ Mulai Analisis Spasial Anda</h2>
-        <p>Klik di peta untuk mendapatkan informasi detail tentang zona, regulasi, dan aktivitas usaha yang diperbolehkan</p>
-        <a href="<?= base_url('map') ?>" class="btn-explore">
-            <i class="bi bi-map me-2"></i> Buka Peta Interaktif
+    <!-- CTA Glass Area -->
+    <div class="main-cta">
+        <h2 class="fw-900 mb-3" style="font-size: 2.5rem;">Cek Lokasi Investasi Anda</h2>
+        <p class="mb-4 opacity-75 fw-600">Dapatkan informasi detail mengenai peruntukan zona dan regulasi pemanfaatan
+            ruang secara instan langsung dari peta.</p>
+        <a href="<?= base_url('map') ?>" class="cta-btn">
+            <i class="bi bi-geo-alt-fill"></i> Buka Peta Sekarang
         </a>
     </div>
 
@@ -562,54 +544,30 @@
 <?php $this->section('scripts') ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-    const peruntukkanChartCanvas = document.getElementById('peruntukkanChart');
-    if (peruntukkanChartCanvas && <?= !empty($rdtrByPeruntukan) ? 'true' : 'false' ?>) {
-        const ctx = peruntukkanChartCanvas.getContext('2d');
-
-        const labels = [
-            <?php foreach ($rdtrByPeruntukan as $item): ?>
-                '<?= addslashes(mb_substr($item['peruntukan'], 0, 18) . (mb_strlen($item['peruntukan']) > 18 ? '…' : '')) ?>',
-            <?php endforeach; ?>
-        ];
-
-        const data = [
-            <?php foreach ($rdtrByPeruntukan as $item): ?>
-                <?= $item['count'] ?>,
-            <?php endforeach; ?>
-        ];
-
-        const colors = [
-            '#1e3c72', '#2a5298', '#3b82f6', '#06b6d4',
-            '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'
-        ];
-
-        new Chart(ctx, {
+    const canvas = document.getElementById('distChart');
+    if (canvas && <?= !empty($rdtrByPeruntukan) ? 'true' : 'false' ?>) {
+        new Chart(canvas.getContext('2d'), {
             type: 'doughnut',
             data: {
-                labels: labels,
+                labels: [<?php foreach ($rdtrByPeruntukan as $it) {
+                    $lbl = $it['peruntukan'];
+                    $short = mb_strlen($lbl) > 15 ? mb_substr($lbl, 0, 15) . '...' : $lbl;
+                    echo "'" . addslashes($short) . "',";
+                } ?>],
                 datasets: [{
-                    data: data,
-                    backgroundColor: colors.slice(0, labels.length),
-                    borderColor: 'rgba(255,255,255,0.6)',
-                    borderWidth: 3,
-                    hoverOffset: 8,
+                    data: [<?php foreach ($rdtrByPeruntukan as $it)
+                        echo $it['count'] . ","; ?>],
+                    backgroundColor: ['#1e3c72', '#2a5298', '#3b82f6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'],
+                    borderWidth: 0,
+                    hoverOffset: 20
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '60%',
+                cutout: '75%',
                 plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: { size: 11, weight: 'bold' },
-                            color: '#64748b',
-                            padding: 14,
-                            usePointStyle: true,
-                            pointStyleWidth: 8,
-                        }
-                    }
+                    legend: { position: 'bottom', labels: { padding: 20, font: { size: 11, weight: 'bold' }, usePointStyle: true } }
                 }
             }
         });

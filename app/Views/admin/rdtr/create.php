@@ -1,11 +1,11 @@
-<?php /** @var \CodeIgniter\View\View $this */?>
-<?php $this->extend('layouts/admin')?>
+<?php /** @var \CodeIgniter\View\View $this */ ?>
+<?php $this->extend('layouts/admin') ?>
 
-<?php $this->section('title')?>
+<?php $this->section('title') ?>
 Konfigurasi Zona RDTR Baru
-<?php $this->endSection()?>
+<?php $this->endSection() ?>
 
-<?php $this->section('styles')?>
+<?php $this->section('styles') ?>
 <style>
     .wizard-nav {
         display: flex;
@@ -101,28 +101,28 @@ Konfigurasi Zona RDTR Baru
         font-size: 1.1rem;
     }
 </style>
-<?php $this->endSection()?>
+<?php $this->endSection() ?>
 
-<?php $this->section('content')?>
+<?php $this->section('content') ?>
 <div class="row justify-content-center">
     <div class="col-xl-10">
         <?php if (session()->getFlashdata('errors')): ?>
-        <div class="alert alert-danger border-0 shadow-sm rounded-4 p-3 mb-4">
-            <div class="fw-800 small text-uppercase mb-2"><i class="bi bi-exclamation-triangle-fill"></i> Terdapat
-                Kesalahan Input:</div>
-            <ul class="mb-0 small fw-600">
-                <?php foreach (session()->getFlashdata('errors') as $error): ?>
-                <li>
-                    <?= $error?>
-                </li>
-                <?php
-    endforeach ?>
-            </ul>
-        </div>
-        <?php
-endif; ?>
+            <div class="alert alert-danger border-0 shadow-sm rounded-4 p-3 mb-4">
+                <div class="fw-800 small text-uppercase mb-2"><i class="bi bi-exclamation-triangle-fill"></i> Terdapat
+                    Kesalahan Input:</div>
+                <ul class="mb-0 small fw-600">
+                    <?php foreach (session()->getFlashdata('errors') as $error): ?>
+                        <li>
+                            <?= $error ?>
+                        </li>
+                        <?php
+                    endforeach ?>
+                </ul>
+            </div>
+            <?php
+        endif; ?>
 
-        <form action="<?= base_url('admin/rdtr/store')?>" method="post" enctype="multipart/form-data" id="rdtrForm">
+        <form action="<?= base_url('admin/rdtr/store') ?>" method="post" enctype="multipart/form-data" id="rdtrForm">
             <!-- Wizard Navigation -->
             <div class="wizard-nav overflow-auto">
                 <div class="wizard-step active" onclick="showTab('tab-info')" id="step-info">
@@ -183,7 +183,7 @@ endif; ?>
                                     <input type="color" name="color"
                                         class="form-control form-control-color border-0 shadow-sm" value="#3b82f6"
                                         style="width: 50px; height: 40px;">
-                                    <span class="small fw-800 text-muted">Pick Zone Color</span>
+                                    <span class="small fw-800 text-muted">Pilih Warna Zona</span>
                                 </div>
                             </div>
                             <div class="col-md-8">
@@ -286,7 +286,7 @@ endif; ?>
                             </button>
                             <button type="button" class="btn btn-primary px-5 py-2 fw-700 rounded-3 shadow-sm"
                                 onclick="showTab('tab-geometry')">
-                                LANJUT KE GEOMETRY <i class="bi bi-arrow-right ms-2"></i>
+                                LANJUT KE DATA SPASIAL <i class="bi bi-arrow-right ms-2"></i>
                             </button>
                         </div>
                     </div>
@@ -304,9 +304,9 @@ endif; ?>
                                         <input class="form-check-input ms-0 me-3" type="radio" name="upload_type"
                                             id="up-geojson" value="geojson" checked>
                                         <label class="form-check-label fw-800 text-dark" for="up-geojson">
-                                            GeoJSON Framework
-                                            <div class="fw-500 small text-muted mt-1 opacity-75">Upload berkas .json
-                                                atau .geojson standar industri.</div>
+                                            Format GeoJSON
+                                            <div class="fw-500 small text-muted mt-1 opacity-75">Unggah berkas .json
+                                                atau .geojson standar industri GIS.</div>
                                         </label>
                                     </div>
                                 </div>
@@ -316,7 +316,7 @@ endif; ?>
                                             id="up-shp" value="shapefile">
                                         <label class="form-check-label fw-800 text-dark" for="up-shp">
                                             ESRI Shapefile
-                                            <div class="fw-500 small text-muted mt-1 opacity-75">Upload set berkas .shp,
+                                            <div class="fw-500 small text-muted mt-1 opacity-75">Unggah set berkas .shp,
                                                 .shx, dan .dbf terkompresi.</div>
                                         </label>
                                     </div>
@@ -326,14 +326,14 @@ endif; ?>
 
                         <!-- Dropzones simulated with styled inputs -->
                         <div id="geojson-input-area">
-                            <label class="form-label fw-700 small">Select GeoJSON File <span
+                            <label class="form-label fw-700 small">Pilih Berkas GeoJSON <span
                                     class="text-danger">*</span></label>
                             <div class="p-4 border border-2 border-dashed rounded-4 text-center bg-white">
                                 <i class="bi bi-cloud-arrow-up fs-1 text-primary opacity-50 mb-3 d-block"></i>
                                 <input type="file" name="geojson_file" class="form-control fw-600" id="gj-file"
                                     accept=".json,.geojson">
-                                <p class="small text-muted mt-2 mb-0 fw-500">Supported formats: .json, .geojson | Single
-                                    FeatureCollection recommended.</p>
+                                <p class="small text-muted mt-2 mb-0 fw-500">Format yang didukung: .json, .geojson |
+                                    Disarankan Feature tunggal.</p>
                             </div>
                         </div>
 
@@ -363,8 +363,8 @@ endif; ?>
                                 <i class="bi bi-arrow-left me-2"></i> KEMBALI
                             </button>
                             <div class="d-flex gap-2">
-                                <a href="<?= base_url('admin/rdtr')?>"
-                                    class="btn btn-light px-4 py-2 fw-700 rounded-3 text-muted">CANCEL</a>
+                                <a href="<?= base_url('admin/rdtr') ?>"
+                                    class="btn btn-light px-4 py-2 fw-700 rounded-3 text-muted">BATAL</a>
                                 <button type="submit" class="btn btn-primary px-5 py-2 fw-700 rounded-3 shadow">
                                     <i class="bi bi-cloud-check-fill me-2"></i> KUKUHKAN DATA ZONA
                                 </button>
@@ -376,9 +376,9 @@ endif; ?>
         </form>
     </div>
 </div>
-<?php $this->endSection()?>
+<?php $this->endSection() ?>
 
-<?php $this->section('scripts')?>
+<?php $this->section('scripts') ?>
 <script>
     function showTab(tabId) {
         // Hide all tabs
@@ -429,4 +429,4 @@ endif; ?>
     // Initial required state
     document.getElementById('gj-file').required = true;
 </script>
-<?php $this->endSection()?>
+<?php $this->endSection() ?>

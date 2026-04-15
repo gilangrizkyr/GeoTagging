@@ -43,6 +43,9 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     // Settings
     $routes->get('settings', 'Admin\SettingsController::index');
     $routes->post('settings/update', 'Admin\SettingsController::update');
+    $routes->post('settings/add-hero', 'Admin\SettingsController::addHeroImage');
+    $routes->get('settings/delete-hero/(:num)', 'Admin\SettingsController::deleteHeroImage/$1');
+    $routes->get('settings/delete-logo/(:any)', 'Admin\SettingsController::deleteLogo/$1');
 
     // Users
     $routes->get('users', 'Admin\UserController::index');
@@ -55,7 +58,7 @@ $routes->group('admin', ['filter' => 'auth'], function ($routes) {
     // Audit Logs (Admin Only)
     $routes->get('audit-logs', 'Admin\AuditLogController::index', ['filter' => 'auth']);
     $routes->get('audit-logs/clear', 'Admin\AuditLogController::clear', ['filter' => 'auth']);
-// ... other methods
+    // ... other methods
 });
 
 // API Routes
@@ -63,6 +66,7 @@ $routes->group('api', function ($routes) {
     $routes->post('spatial/check', 'Api\Spatial::check');
     $routes->get('spatial/layers', 'Api\Spatial::layers');
     $routes->post('spatial/validate-kbli', 'Api\Spatial::validateKBLI');
+    $routes->get('spatial/export-analysis', 'Api\Spatial::exportAnalysis');
 
     // RDTR Activities
     $routes->get('rdtr/zone/(:num)/activities', 'Api\RdtrActivity::getByZone/$1');

@@ -41,6 +41,12 @@ class Home extends BaseController
             ->countAll();
         $avgSearchesPerDay = round($searchesLastWeek / 7, 2);
 
+        $heroModel = new \App\Models\HeroImageModel();
+        $heroImages = $heroModel->getSorted();
+
+        $settingsModel = new \App\Models\SettingsModel();
+        $heroSlideInterval = $settingsModel->getValue('hero_slide_interval', '5');
+
         $data = [
             'totalRdtr' => $totalRdtr,
             'totalRtrw' => $totalRtrw,
@@ -48,6 +54,8 @@ class Home extends BaseController
             'rdtrByPeruntukan' => $rdtrByPeruntukan,
             'topPeruntukan' => $topPeruntukan,
             'avgSearchesPerDay' => $avgSearchesPerDay,
+            'heroImages' => $heroImages,
+            'heroSlideInterval' => (int) $heroSlideInterval * 1000, // Convert to ms
         ];
 
         return view('home/index', $data);

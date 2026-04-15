@@ -1,32 +1,53 @@
-<?php /** @var \CodeIgniter\View\View $this */?>
-<?php $this->extend('layouts/admin')?>
+<?php /** @var \CodeIgniter\View\View $this */ ?>
+<?php $this->extend('layouts/admin') ?>
 
-<?php $this->section('title')?>
+<?php $this->section('title') ?>
 Data RTRW (Rencana Tata Ruang Wilayah)
-<?php $this->endSection()?>
+<?php $this->endSection() ?>
 
-<?php $this->section('content')?>
+<?php $this->section('scripts') ?>
+<script>
+    $(document).ready(function () {
+        $("#table-search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("table tbody tr").filter(function () {
+                if ($(this).find('td').length > 1) {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                }
+            });
+        });
+    });
+</script>
+<?php $this->endSection() ?>
+
+<?php $this->section('content') ?>
 
 <?php if (session()->getFlashdata('success')): ?>
-<div class="alert alert-success border-0 shadow-sm rounded-4 d-flex align-items-center p-3 mb-4" role="alert">
-    <i class="bi bi-check-circle-fill fs-4 me-3"></i>
-    <div class="fw-600">
-        <?= session()->getFlashdata('success')?>
+    <div class="alert alert-success border-0 shadow-sm rounded-4 d-flex align-items-center p-3 mb-4" role="alert">
+        <i class="bi bi-check-circle-fill fs-4 me-3"></i>
+        <div class="fw-600">
+            <?= session()->getFlashdata('success') ?>
+        </div>
+        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
     </div>
-    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-</div>
-<?php
+    <?php
 endif; ?>
 
 <div class="card card-premium overflow-hidden">
-    <div class="card-header bg-white py-4 px-4 d-flex justify-content-between align-items-center border-0">
+    <div
+        class="card-header bg-white py-4 px-4 d-flex justify-content-between align-items-center border-0 flex-wrap gap-3">
         <div>
             <h5 class="mb-1 fw-800 text-dark">Daftar Kawasan Wilayah</h5>
             <p class="text-muted small mb-0 fw-500">Manajemen area dan fungsi kawasan perencanaan wilayah.</p>
         </div>
-        <div>
-            <a href="<?= base_url('admin/rtrw/create')?>"
-                class="btn btn-warning text-white fw-700 rounded-3 px-3 shadow-sm">
+        <div class="d-flex gap-2 align-items-center flex-grow-1 flex-md-grow-0">
+            <div class="input-group input-group-sm">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" id="table-search" class="form-control border-start-0 ps-0"
+                    placeholder="Cari nama kawasan...">
+            </div>
+            <a href="<?= base_url('admin/rtrw/create') ?>"
+                class="btn btn-warning text-white fw-700 rounded-3 px-3 shadow-sm text-nowrap">
                 <i class="bi bi-plus-lg me-2"></i> TAMBAH KAWASAN
             </a>
         </div>
@@ -46,52 +67,52 @@ endif; ?>
                 </thead>
                 <tbody>
                     <?php if (!empty($areas)): ?>
-                    <?php foreach ($areas as $area): ?>
-                    <tr>
-                        <td class="ps-4 py-3">
-                            <div class="d-flex align-items-center">
-                                <div class="rounded-pill p-1 me-3 shadow-sm"
-                                    style="background-color: <?= $area['color'] ?? '#ccc'?>; width: 12px; height: 12px;">
+                        <?php foreach ($areas as $area): ?>
+                            <tr>
+                                <td class="ps-4 py-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-pill p-1 me-3 shadow-sm"
+                                            style="background-color: <?= $area['color'] ?? '#ccc' ?>; width: 12px; height: 12px;">
+                                        </div>
+                                        <div class="fw-700 text-dark">
+                                            <?= esc($area['nama_kawasan']) ?>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-3">
+                                    <div class="fw-600 text-secondary">
+                                        <?= esc($area['fungsi_kawasan']) ?>
+                                    </div>
+                                </td>
+                                <td class="text-end pe-4 py-3">
+                                    <div class="btn-group shadow-sm rounded-3 overflow-hidden border">
+                                        <a href="<?= base_url('admin/rtrw/edit/' . $area['id']) ?>"
+                                            class="btn btn-white btn-sm px-3 hover-warning border-end" title="Edit">
+                                            <i class="bi bi-pencil-square text-warning py-1 d-inline-block"></i>
+                                        </a>
+                                        <a href="<?= base_url('admin/rtrw/delete/' . $area['id']) ?>"
+                                            class="btn btn-white btn-sm px-3 hover-danger" title="Hapus"
+                                            onclick="return confirm('Yakin ingin menghapus kawasan ini?');">
+                                            <i class="bi bi-trash3 text-danger py-1 d-inline-block"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php
+                        endforeach; ?>
+                        <?php
+                    else: ?>
+                        <tr>
+                            <td colspan="3" class="text-center py-5">
+                                <div class="py-4">
+                                    <i class="bi bi-database-slash fs-1 text-muted opacity-25 d-block mb-3"></i>
+                                    <h6 class="fw-700 text-muted">Belum ada data kawasan RTRW.</h6>
+                                    <p class="small text-muted mb-0">Silakan tambahkan data baru melalui tombol di atas.</p>
                                 </div>
-                                <div class="fw-700 text-dark">
-                                    <?= esc($area['nama_kawasan'])?>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="py-3">
-                            <div class="fw-600 text-secondary">
-                                <?= esc($area['fungsi_kawasan'])?>
-                            </div>
-                        </td>
-                        <td class="text-end pe-4 py-3">
-                            <div class="btn-group shadow-sm rounded-3 overflow-hidden border">
-                                <a href="<?= base_url('admin/rtrw/edit/' . $area['id'])?>"
-                                    class="btn btn-white btn-sm px-3 hover-warning border-end" title="Edit">
-                                    <i class="bi bi-pencil-square text-warning py-1 d-inline-block"></i>
-                                </a>
-                                <a href="<?= base_url('admin/rtrw/delete/' . $area['id'])?>"
-                                    class="btn btn-white btn-sm px-3 hover-danger" title="Hapus"
-                                    onclick="return confirm('Yakin ingin menghapus kawasan ini?');">
-                                    <i class="bi bi-trash3 text-danger py-1 d-inline-block"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    <?php
-    endforeach; ?>
-                    <?php
-else: ?>
-                    <tr>
-                        <td colspan="3" class="text-center py-5">
-                            <div class="py-4">
-                                <i class="bi bi-database-slash fs-1 text-muted opacity-25 d-block mb-3"></i>
-                                <h6 class="fw-700 text-muted">Belum ada data kawasan RTRW.</h6>
-                                <p class="small text-muted mb-0">Silakan tambahkan data baru melalui tombol di atas.</p>
-                            </div>
-                        </td>
-                    </tr>
-                    <?php
-endif; ?>
+                            </td>
+                        </tr>
+                        <?php
+                    endif; ?>
                 </tbody>
             </table>
         </div>
@@ -117,4 +138,4 @@ endif; ?>
         color: #dc2626 !important;
     }
 </style>
-<?php $this->endSection()?>
+<?php $this->endSection() ?>

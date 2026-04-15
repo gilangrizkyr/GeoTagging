@@ -12,6 +12,27 @@ $headerColor = $settingsModel->getValueWithRole('header_color', $role, $headerCo
 $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'Pusat Data Spasial');
 // footer text customizable via settings
 $footerText = $settingsModel->getValueWithRole('footer_text', $role, 'Dinas Penanaman Modal dan PTSP');
+
+// Fetch Social Media & Map Settings
+$fbUrl = $settingsModel->getValueWithRole('facebook_url', $role, '');
+$igUrl = $settingsModel->getValueWithRole('instagram_url', $role, '');
+$ytUrl = $settingsModel->getValueWithRole('youtube_url', $role, '');
+$twUrl = $settingsModel->getValueWithRole('twitter_url', $role, '');
+$mapIframe = $settingsModel->getValueWithRole('office_map_iframe', $role, '');
+
+// Helper to clean paths that might have 'public/' prefix from database
+if (!function_exists('clean_asset_url')) {
+    function clean_asset_url($path)
+    {
+        if (empty($path))
+            return '';
+        // If path starts with public/, remove it
+        if (strpos($path, 'public/') === 0) {
+            $path = substr($path, 7);
+        }
+        return base_url($path);
+    }
+}
 ?>
 <html lang="id">
 
@@ -21,6 +42,8 @@ $footerText = $settingsModel->getValueWithRole('footer_text', $role, 'Dinas Pena
     <title>
         <?= esc($appName) ?>
     </title>
+    <meta name="csrf-token" content="<?= csrf_hash() ?>">
+    <meta name="csrf-header" content="<?= csrf_header() ?>">
 
     <!-- Fonts & Assets -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -32,35 +55,26 @@ $footerText = $settingsModel->getValueWithRole('footer_text', $role, 'Dinas Pena
 
     <style>
         :root {
-            --primary: #3c4b64;
-            --primary-dark: #2c3e50;
-            --primary-light: #526684;
-            --secondary: #64748b;
-            --accent: #27ae60;
-            --accent-teal: #3db4c8;
+            --primary: #1e3c72;
+            --primary-dark: #0f172a;
+            --primary-light: #2a5298;
+            --accent: #10b981;
+            --accent-teal: #06b6d4;
+            --accent-amber: #f59e0b;
             --bg-main: #f8fafc;
 
-            /* Modern Gradients */
-            --grad-primary: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            --grad-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+            /* Luxury Glassmorphism */
+            --glass-bg: rgba(255, 255, 255, 0.82);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-blur: blur(24px);
 
-            /* Premium Tokens */
-            --radius-3xl: 32px;
-            --radius-2xl: 24px;
+            /* Flagship Shadows */
+            --shadow-premium: 0 30px 60px -15px rgba(0, 0, 0, 0.12);
+            --shadow-glow: 0 10px 30px -5px rgba(30, 60, 114, 0.25);
+
+            --radius-3xl: 40px;
+            --radius-2xl: 28px;
             --radius-xl: 18px;
-
-            /* Layered Shadows (Ambient Occlusion style) */
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --shadow-glow: 0 10px 15px -3px rgba(60, 75, 100, 0.3);
-
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: 1px solid rgba(255, 255, 255, 0.4);
-            --glass-blur: blur(20px);
-
-            --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            --transition-smooth: all 0.3s ease;
         }
 
         @keyframes mesh-animation {
@@ -83,73 +97,54 @@ $footerText = $settingsModel->getValueWithRole('footer_text', $role, 'Dinas Pena
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            background: linear-gradient(-45deg, #f8fafc, #f1f5f9, #e2e8f0, #f8fafc);
+            z-index: -2;
+            background: linear-gradient(-45deg, #f8fafc, #f1f5f9, #eef2ff, #f0fdf4, #f8fafc);
             background-size: 400% 400%;
-            animation: mesh-animation 15s ease infinite;
-            opacity: 0.8;
+            animation: mesh-animation 20s ease infinite;
         }
 
-        .mesh-blob {
+        .bg-blob {
             position: fixed;
-            width: 600px;
-            height: 600px;
-            filter: blur(120px);
-            z-index: -1;
-            opacity: 0.15;
+            width: 900px;
+            height: 900px;
             border-radius: 50%;
+            z-index: -1;
+            filter: blur(150px);
+            opacity: 0.15;
             pointer-events: none;
         }
 
         .blob-1 {
-            top: -100px;
-            right: -100px;
+            top: -300px;
+            right: -200px;
             background: var(--primary);
-            animation: float 20s infinite alternate;
+            animation: float-blob 25s infinite alternate;
         }
 
         .blob-2 {
-            bottom: -200px;
-            left: -200px;
+            bottom: -400px;
+            left: -300px;
             background: var(--accent);
-            animation: float 25s infinite alternate-reverse;
+            animation: float-blob 30s infinite alternate-reverse;
         }
 
-        @keyframes float {
-            from {
-                transform: translate(0, 0);
-            }
-
-            to {
-                transform: translate(100px, 100px);
-            }
+        .blob-3 {
+            top: 20%;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: var(--accent-teal);
+            animation: float-blob 20s infinite;
+            opacity: 0.08;
         }
 
-        @media (min-width: 992px) {
-
-            html,
-            body {
-                height: auto;
-                overflow-y: auto;
+        @keyframes float-blob {
+            0% {
+                transform: translate(0, 0) scale(1);
             }
 
-            body {
-                display: flex;
-                flex-direction: column;
-            }
-        }
-
-        @media (max-width: 991px) {
-
-            html,
-            body {
-                height: auto;
-                overflow: visible;
-            }
-
-            body {
-                display: block;
-                overflow: visible;
+            100% {
+                transform: translate(100px, 150px) scale(1.15);
             }
         }
 
@@ -157,610 +152,458 @@ $footerText = $settingsModel->getValueWithRole('footer_text', $role, 'Dinas Pena
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: transparent;
             color: #1e293b;
-            letter-spacing: -0.01em;
+            letter-spacing: -0.015em;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        /* Decorative Background Elements */
-        .bg-blob {
-            position: fixed;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(240, 242, 245, 0) 70%);
-            z-index: -1;
-            filter: blur(40px);
-            pointer-events: none;
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        .navbar-brand {
+            font-family: 'Outfit', sans-serif;
         }
 
-        .blob-1 {
-            top: -100px;
-            right: -100px;
+        .fw-500 {
+            font-weight: 500;
         }
 
-        .blob-2 {
-            bottom: -100px;
-            left: -100px;
-            background: radial-gradient(circle, rgba(245, 158, 11, 0.1) 0%, rgba(240, 242, 245, 0) 70%);
+        .fw-600 {
+            font-weight: 600;
         }
 
-        /* Navbar: Crystal Clear */
-        .navbar {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.5) 100%) !important;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 16px;
-            padding: 0.7rem 0;
+        .fw-700 {
+            font-weight: 700;
+        }
+
+        .fw-800 {
+            font-weight: 800;
+        }
+
+        .fw-900 {
+            font-weight: 900;
+        }
+
+        /* --- Flagship Floating Navbar --- */
+        .navbar-container {
+            padding: 1.5rem 2rem 0.5rem 2rem;
+            position: sticky;
+            top: 0;
             z-index: 1050;
-            box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.15);
-            margin: 14px 16px 8px 16px;
-            top: 8px;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.4s ease;
         }
 
-        .navbar:hover {
-            box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.2);
+        .navbar {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--glass-bg) !important;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1.5px solid var(--glass-border);
+            border-radius: var(--radius-2xl);
+            padding: 0.9rem 2rem;
+            box-shadow: var(--shadow-premium);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .navbar.scrolled {
+            padding: 0.6rem 2rem;
+            margin-top: -0.5rem;
+            border-radius: 0 0 30px 30px;
+            border-top-color: transparent;
         }
 
         .navbar-brand {
-            font-weight: 900;
-            font-family: 'Outfit', sans-serif;
             display: flex;
             align-items: center;
-            gap: 14px;
-            font-size: 1.4rem;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            transform: translateZ(0);
-            transition: all 0.4s ease;
-            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        .navbar-brand:hover {
-            transform: scale(1.05);
+        .brand-logos img {
+            height: 44px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.05));
         }
 
-        .navbar-title-group {
-            display: flex;
-            flex-direction: column;
-            margin-left: 12px;
-            min-width: 0;
-        }
-
-        .navbar-app-name {
+        .app-name {
             font-weight: 900;
-            font-size: 1.1rem;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            font-size: 1.35rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.2;
-            word-break: break-word;
+            letter-spacing: -1px;
         }
 
-        .navbar-app-subtitle {
-            font-weight: 600;
+        .app-subtitle {
+            font-weight: 700;
             font-size: 0.7rem;
             color: #64748b;
-            line-height: 1;
-        }
-
-        @media (max-width: 991px) {
-            .navbar-title-group {
-                margin-left: 8px;
-            }
-
-            .navbar-app-name {
-                font-size: 0.95rem;
-            }
-
-            .navbar-app-subtitle {
-                font-size: 0.65rem;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .navbar-title-group {
-                margin-left: 6px;
-            }
-
-            .navbar-app-name {
-                font-size: 0.85rem;
-            }
-
-            .navbar-app-subtitle {
-                font-size: 0.6rem;
-            }
-        }
-
-        .brand-logo-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 8px;
-        }
-
-        .brand-logo-group {
-            display: flex;
-            align-items: center;
-        }
-
-        .brand-logo-container.has-icon {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            font-size: 2rem;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border-radius: 12px;
-            width: 52px;
-            height: 52px;
-        }
-
-        .brand-logo-container.has-image img {
-            max-height: 48px;
-            width: auto;
-        }
-
-        .navbar-brand:hover .brand-logo-container {
-            transform: scale(1.15) rotate(8deg);
-            box-shadow: 0 10px 25px rgba(30, 60, 114, 0.3);
-        }
-
-        .nav-link {
-            font-weight: 800;
-            color: #64748b !important;
-            padding: 10px 20px !important;
-            border-radius: 10px;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            font-size: 0.95rem;
-            position: relative;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-link.active,
-        .nav-link:hover {
-            color: #1e3c72 !important;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(99, 102, 241, 0.06) 100%);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
-            transform: translateY(-2px);
         }
 
         @media (max-width: 991px) {
-            .nav-link {
-                display: flex;
-                align-items: center;
-                font-size: 0.9rem;
-                padding: 12px 16px !important;
+            .navbar {
+                padding: 0.7rem 1.2rem !important;
+            }
+
+            .app-name {
+                font-size: 1.05rem !important;
+                letter-spacing: -0.5px !important;
+            }
+
+            .app-subtitle {
+                font-size: 0.55rem !important;
+                letter-spacing: 0.5px !important;
+            }
+
+            .brand-logos img {
+                height: 36px !important;
             }
         }
 
-        @media (max-width: 576px) {
-            .nav-link {
-                font-size: 0.8rem;
-                padding: 10px 12px !important;
-            }
+        .nav-link.active {
+            color: var(--primary) !important;
+            background: rgba(30, 60, 114, 0.06);
         }
 
         .btn-portal {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
-            border: none;
+            background: var(--primary);
             color: white !important;
             padding: 12px 28px !important;
-            border-radius: 10px;
+            border-radius: 14px;
             font-weight: 800;
-            box-shadow: 0 10px 25px rgba(30, 60, 114, 0.3);
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            overflow: hidden;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 0.85rem;
-        }
-
-        .btn-portal::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
+            box-shadow: var(--shadow-glow);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .btn-portal:hover {
-            transform: translateY(-4px) scale(1.06);
-            box-shadow: 0 20px 40px rgba(30, 60, 114, 0.4);
+            transform: translateY(-4px) scale(1.03);
+            background: var(--primary-light);
+            box-shadow: 0 15px 35px rgba(30, 60, 114, 0.35);
         }
 
-        .btn-portal:hover::before {
-            left: 100%;
+        .navbar-toggler-icon {
+            filter: brightness(0) saturate(100%) invert(18%) sepia(43%) saturate(1967%) hue-rotate(204deg) brightness(91%) contrast(92%);
         }
 
-        /* App Container */
-        .app-main-content {
-            padding: 8px 24px 24px 24px;
-            display: flex;
-            gap: 24px;
-            flex-direction: column;
-        }
-
-        @media (min-width: 992px) {
-            .app-main-content {
-                flex: 1;
-                min-height: 0;
-                overflow: visible;
-            }
-
-            /* Control visual order in desktop: panel left, map right */
-            .floating-panel {
-                order: 1;
-            }
-
-            .map-content-wrapper {
-                order: 2;
-            }
-        }
-
-        @media (max-width: 991px) {
-            .app-main-content {
-                display: flex;
-                flex-direction: column;
-                padding: 16px;
-            }
-        }
-
-        /* Elegant Sidebar */
-        .floating-panel {
-            width: 440px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 100%);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            border-radius: 20px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            max-height: calc(100vh - 160px);
-            animation: slideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .floating-panel:hover {
-            box-shadow: 0 35px 70px -12px rgba(0, 0, 0, 0.2);
-            transform: translateY(-2px);
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(-30px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .panel-header {
-            padding: 24px 20px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
-            border-bottom: 1px solid rgba(30, 60, 114, 0.1);
-            position: relative;
+        /* --- Flagship Footer --- */
+        footer {
+            background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 80px 0 40px 0;
+            margin-top: 100px;
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            position: relative;
         }
 
-        .panel-header h5 {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 900;
-            font-size: 1.6rem;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #27ae60 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 0;
+        .footer-heading {
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 24px;
+            color: var(--primary-dark);
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 16px;
         }
 
-        .header-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%);
-            color: #1e3c72;
-            border-radius: 12px;
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
-            transition: all 0.3s ease;
-        }
-
-        .panel-header:hover .header-icon {
-            transform: scale(1.1) rotate(10deg);
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
-        }
-
-        .panel-body {
-            padding: 20px;
-            overflow-y: auto;
-            flex-grow: 1;
-            scrollbar-gutter: stable;
-        }
-
-        /* Custom Scrollbar for Premium Feel */
-        .panel-body::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .panel-body::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .panel-body::-webkit-scrollbar-thumb {
-            background: rgba(60, 75, 100, 0.15);
-            border-radius: 10px;
-            transition: var(--transition-smooth);
-        }
-
-        .panel-body::-webkit-scrollbar-thumb:hover {
-            background: rgba(60, 75, 100, 0.3);
-        }
-
-        /* Map Frame: The Centerpiece */
-        .map-frame {
-            flex-grow: 1;
+            border-radius: 12px;
             background: white;
-            border-radius: var(--radius-3xl);
-            border: none;
-            box-shadow: var(--shadow-premium);
-            overflow: hidden;
-            position: relative;
-            transform: translateZ(0);
-        }
-
-        #map {
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            border-radius: var(--radius-3xl);
-        }
-
-        /* Floating Controls & Search */
-        .search-container {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.7) 100%);
-            border-radius: 16px;
-            padding: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            backdrop-filter: blur(10px);
-        }
-
-        .search-container:focus-within {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 45px -5px rgba(30, 60, 114, 0.2);
-            border-color: #1e3c72;
-            background: white;
-        }
-
-        .form-floating>.form-control {
-            border: none;
-            background: transparent;
-            font-weight: 700;
-            color: #0f172a;
-            padding: 12px 16px;
-            font-size: 0.95rem;
-        }
-
-        .form-floating>.form-control:focus {
-            border: none;
-            background: rgba(30, 60, 114, 0.02);
-            box-shadow: none;
-            color: #1e3c72;
-        }
-
-        .form-floating>label {
-            color: #94a3b8;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        @media (max-width: 991px) {
-            .app-main-content {
-                padding: 12px;
-                height: auto;
-                flex-direction: column;
-            }
-
-            .map-content-wrapper {
-                order: 1;
-                margin-bottom: 24px;
-                margin-top: 12px;
-            }
-
-            .map-frame {
-                height: 40vh;
-                border: 6px solid white;
-            }
-
-            .floating-panel {
-                order: 2;
-                position: relative;
-                bottom: auto;
-                left: auto;
-                right: auto;
-                width: 100%;
-                height: auto;
-                max-height: none;
-                transform: none;
-                box-shadow: var(--shadow-premium);
-                margin-bottom: 24px;
-            }
-        }
-
-        /* footer styling enhanced for modern look */
-        footer {
-            padding: 1.2rem 0;
-            background: #ffffff;
-            border-top: 2px solid #e2e8f0;
-            border-bottom: 2px solid #e2e8f0;
-            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.05);
-            margin-top: 0;
-            font-weight: 600;
-            color: #4a5568;
-            font-size: 0.9rem;
-        }
-
-        footer a {
-            color: inherit;
+            color: var(--primary);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-decoration: none;
         }
 
-        footer a:hover {
-            text-decoration: underline;
+        .social-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(30, 60, 114, 0.2);
         }
 
-        footer div:last-child {
-            font-size: 0.7rem;
-            opacity: 0.75;
-            letter-spacing: 0.5px;
-            margin-top: 8px;
+        .map-frame {
+            border-radius: 24px;
+            overflow: hidden;
+            border: 4px solid white;
+            box-shadow: var(--shadow-premium);
+            height: 200px;
+            background: #eee;
         }
 
-        @media (min-width: 992px) {
-    .app-main-content {
-        flex-direction: row;
-        align-items: flex-start;
-        flex: 1;
-    }
-
-    .floating-panel {
-        order: 1;
-        flex-shrink: 0;
-        width: 400px;
-        height: 75vh;        /* ← tinggi tetap */
-        max-height: 75vh;    /* ← tidak bisa memanjang */
-        position: sticky;
-        top: 100px;
-        overflow: hidden;    /* ← konten tidak meluber */
-    }
-
-    .panel-body {
-        overflow-y: auto;    /* ← scroll di dalam panel */
-        height: calc(75vh - 80px); /* dikurangi tinggi panel-header */
-    }
-
-    .map-content-wrapper {
-        order: 2;
-        flex: 1;
-        height: 75vh;        /* ← sama dengan panel */
-    }
-
-    .map-frame {
-        height: 100%;
-    }
-
+        .map-frame iframe {
+            width: 100% !important;
+            height: 100% !important;
+            border: 0;
         }
+
+        .footer-bottom {
+            margin-top: 60px;
+            padding-top: 32px;
+            border-top: 1.5px solid rgba(0, 0, 0, 0.05);
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #94a3b8;
+        }
+
+        /* --- Content Layout --- */
+        .app-main-content {
+            padding: 0 48px 40px 48px;
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 auto;
+            min-height: 0;
+            position: relative;
+        }
+
+        /* Essential Fix for Map Visibility */
+        body.is-map-page {
+            height: 100vh;
+            overflow: hidden !important;
+        }
+
+        @media (max-width: 991px) {
+            body.is-map-page {
+                height: auto;
+                overflow: auto !important;
+            }
+        }
+
+        body.is-map-page .navbar-container {
+            padding: 1rem 1.5rem 0.5rem 1.5rem;
+        }
+
+        body.is-map-page .app-main-content {
+            padding: 16px;
+            gap: 0;
+            height: calc(100vh - 100px);
+            /* Adjust based on navbar height */
+            overflow: hidden;
+        }
+
+        @media (max-width: 991px) {
+            body.is-map-page .app-main-content {
+                height: auto;
+                /* Mobile navbar height */
+                padding: 10px;
+                overflow: visible;
+            }
+        }
+
+        body.is-map-page footer {
+            display: none;
+        }
+
+        @media (max-width: 991px) {
+            .navbar-container {
+                padding: 1rem 1rem 0 1rem;
+            }
+
+            .navbar {
+                padding: 0.7rem 1.2rem;
+                border-radius: 20px;
+            }
+
+            .app-main-content {
+                padding: 0 20px 20px 20px;
+                gap: 20px;
+            }
+
+            body.is-map-page .app-main-content {
+                padding: 10px;
+                height: calc(100vh - 85px);
+            }
+
+            .app-name {
+                font-size: 1.15rem;
+            }
+        }
+    </style>
     </style>
     <?= $this->renderSection('styles') ?>
 </head>
 
-<body class="d-flex flex-column min-vh-100">
-    <div class="bg-blob blob-1"></div>
-    <div class="bg-blob blob-2"></div>
-
+<body
+    class="d-flex flex-column min-vh-100 role-<?= $role ?> <?= (strpos(current_url(), '/map') !== false) ? 'is-map-page' : '' ?>">
+    <!-- Fluid Deco Background -->
     <div class="mesh-background"></div>
-    <div class="mesh-blob blob-1"></div>
-    <div class="mesh-blob blob-2"></div>
+    <div class="bg-blob blob-p"></div>
+    <div class="bg-blob blob-a"></div>
 
-    <nav class="navbar navbar-expand-lg sticky-top">
-        <div class="container-fluid px-4 px-lg-5">
-            <a class="navbar-brand" href="<?= base_url() ?>">
-                <div class="brand-logo-group">
-                    <?php if ($logoNavbar1): ?>
-                        <div class="brand-logo-container has-image ms-0">
-                            <img src="<?= base_url($logoNavbar1) ?>" alt="Logo 1">
-                        </div>
-                    <?php endif; ?>
-                    <?php if ($logoNavbar2): ?>
-                        <div class="brand-logo-container has-image">
-                            <img src="<?= base_url($logoNavbar2) ?>" alt="Logo 2">
-                        </div>
-                    <?php endif; ?>
-                    <?php if ($logoNavbar3): ?>
-                        <div class="brand-logo-container has-image">
-                            <img src="<?= base_url($logoNavbar3) ?>" alt="Logo 3">
-                        </div>
-                    <?php endif; ?>
-                    <?php if (!($logoNavbar1 || $logoNavbar2 || $logoNavbar3)): ?>
-                        <div class="brand-logo-container has-icon">
-                            <i class="bi bi-geo-fill"></i>
-                        </div>
-                    <?php endif; ?>
-                    <div class="navbar-title-group d-flex flex-column justify-content-center ms-2">
-                        <div class="navbar-app-name"><?= esc($appName) ?></div>
-                        <div class="navbar-app-subtitle"><?= esc($appSubtitle) ?></div>
+    <div class="navbar-container">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="<?= base_url() ?>">
+                    <div class="brand-logos d-flex gap-1 gap-md-2 align-items-center">
+                        <?php if (isset($logoNavbar1) && $logoNavbar1): ?>
+                            <img src="<?= clean_asset_url($logoNavbar1) ?>" alt="Logo 1">
+                        <?php endif; ?>
+                        <?php if (isset($logoNavbar2) && $logoNavbar2): ?>
+                            <img src="<?= clean_asset_url($logoNavbar2) ?>" alt="Logo 2" class="d-none d-lg-block">
+                        <?php endif; ?>
                     </div>
+                    <div class="d-flex flex-column">
+                        <span class="app-name">Geotagging DPMPTSP <span class="d-none d-lg-inline">TANAH
+                                BUMBU</span></span>
+                        <span class="app-subtitle">Sistem Informasi Geospasial Terintegrasi</span>
+                    </div>
+                </a>
+
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        <li class="nav-item">
+                            <a class="nav-link <?= (current_url() == base_url() || current_url() == base_url('/')) ? 'active' : '' ?>"
+                                href="<?= base_url() ?>">Beranda</a>
+                        </li>
+                        <li class="nav-item ms-lg-2">
+                            <a class="nav-link <?= (strpos(current_url(), '/map') !== false) ? 'active' : '' ?>"
+                                href="<?= base_url('map') ?>">Peta Interaktif</a>
+                        </li>
+                        <li class="nav-item ms-lg-4">
+                            <a class="nav-link btn-portal" href="<?= base_url('auth/login') ?>">
+                                <i class="bi bi-shield-lock-fill me-2"></i> Portal Petugas
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-            </a>
-
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <i class="bi bi-list fs-2"></i>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a
-                            class="nav-link <?= (current_url() == base_url() || current_url() == base_url('/')) ? 'active' : '' ?>"
-                            href="<?= base_url() ?>"><i class="bi bi-house-door-fill me-1"></i> Beranda</a></li>
-                    <li class="nav-item ms-lg-3"><a
-                            class="nav-link <?= (strpos(current_url(), '/map') !== false) ? 'active' : '' ?>"
-                            href="<?= base_url('map') ?>"><i class="bi bi-map-fill me-1"></i> Peta Interaktif</a></li>
-                    <li class="nav-item ms-lg-3">
-                        <a class="nav-link btn-portal" href="<?= base_url('auth/login') ?>">
-                            <i class="bi bi-shield-lock-fill me-2"></i> Portal Petugas
-                        </a>
-                    </li>
-                </ul>
             </div>
-        </div>
-    </nav>
-
-
-    <!-- <div class="flex-grow-1 app-main-content" style="display: flex; flex-direction: column;"> -->
-    <div class="flex-grow-1 app-main-content">
-        <?= $this->renderSection('content') ?>
+        </nav>
     </div>
+
+    <main class="flex-grow-1 app-main-content">
+        <?= $this->renderSection('content') ?>
+    </main>
 
     <footer>
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-6 text-md-start mb-2 mb-md-0">
-                    <div>&copy; <?= date('Y') ?> DPMPTSP • KABUPATEN TANAH BUMBU</div>
-                    <div class="small text-muted">Sistem Informasi Geografis Tata Ruang Terintegratif</div>
+            <div class="row g-4 justify-content-between">
+                <div class="col-lg-4 col-md-6">
+                    <div class="footer-brand mb-4">
+                        <h4 class="fw-900 text-primary mb-1"><?= esc($appName) ?></h4>
+                        <p class="text-muted small"><?= esc($appSubtitle) ?></p>
+                    </div>
+                    <p class="text-muted mb-4 pe-lg-4">Sistem Informasi Geospasial Terintegrasi Kabupaten Tanah Bumbu
+                        untuk transparansi data tata ruang dan investasi.</p>
+
+                    <!-- Dynamic Social Media -->
+                    <?php if ($fbUrl || $igUrl || $ytUrl || $twUrl): ?>
+                        <div class="d-flex gap-3">
+                            <?php if ($fbUrl): ?><a href="<?= esc($fbUrl) ?>" target="_blank" class="social-btn"><i
+                                        class="bi bi-facebook"></i></a><?php endif; ?>
+                            <?php if ($igUrl): ?><a href="<?= esc($igUrl) ?>" target="_blank" class="social-btn"><i
+                                        class="bi bi-instagram"></i></a><?php endif; ?>
+                            <?php if ($ytUrl): ?><a href="<?= esc($ytUrl) ?>" target="_blank" class="social-btn"><i
+                                        class="bi bi-youtube"></i></a><?php endif; ?>
+                            <?php if ($twUrl): ?><a href="<?= esc($twUrl) ?>" target="_blank" class="social-btn"><i
+                                        class="bi bi-twitter-x"></i></a><?php endif; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <div class="small text-muted"><?= esc($footerText) ?></div>
-                    <div class="small mt-1"><a href="mailto:info@tanahbumbu.go.id"><i class="bi bi-envelope-fill"></i>
-                            info@tanahbumbu.go.id</a></div>
+
+                <div class="col-lg-2 col-md-6">
+                    <h5 class="footer-heading">Navigasi</h5>
+                    <ul class="footer-links">
+                        <li><a href="<?= base_url() ?>">Halaman Utama</a></li>
+                        <li><a href="<?= base_url('map') ?>">Peta Interaktif</a></li>
+                        <li><a href="<?= base_url('map?layer=rdtr') ?>">Layer RDTR</a></li>
+                        <li><a href="<?= base_url('map?layer=rtrw') ?>">Layer RTRW</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6">
+                    <h5 class="footer-heading">Kontak</h5>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="bi bi-geo-alt-fill me-2 text-primary"></i> <?= esc($footerText) ?></a>
+                        </li>
+                        <li><a href="mailto:info@tanahbumbu.go.id"><i class="bi bi-envelope-fill me-2 text-primary"></i>
+                                info@tanahbumbu.go.id</a></li>
+                        <li><a href="tel:#"><i class="bi bi-telephone-fill me-2 text-primary"></i> (0518) Hubungi
+                                Kami</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="footer-heading">Lokasi Kami</h5>
+                    <div class="map-frame">
+                        <?php if ($mapIframe): ?>
+                            <?= $mapIframe ?>
+                        <?php else: ?>
+                            <div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted bg-light">
+                                <small>Peta belum dikonfigurasi</small>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start">
+                <p class="mb-3 mb-md-0">&copy; <?= date('Y') ?> Pemerintah Kabupaten Tanah Bumbu. Seluruh Hak Cipta
+                    Dilindungi.</p>
+                <div class="d-flex gap-4">
+                    <a href="#" class="text-decoration-none text-muted hover-primary">Kebijakan Privasi</a>
+                    <a href="#" class="text-decoration-none text-muted hover-primary">Syarat & Ketentuan</a>
                 </div>
             </div>
         </div>
     </footer>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>const baseUrl = "<?= base_url() ?>";</script>
+    <script>
+        const baseUrl = "<?= base_url() ?>";
+        // Navbar Scrolled Effect
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 50) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            } else {
+                document.querySelector('.navbar').classList.remove('scrolled');
+            }
+        });
+    </script>
     <?= $this->renderSection('scripts') ?>
 </body>
 

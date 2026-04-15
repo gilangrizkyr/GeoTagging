@@ -15,8 +15,8 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'SISTEM S
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <?= ucfirst($role)?> Panel -
-        <?= esc($appName)?>
+        <?= ucfirst($role) ?> Panel -
+        <?= esc($appName) ?>
     </title>
 
     <!-- Fonts -->
@@ -40,11 +40,15 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'SISTEM S
             --radius-2xl: 1.5rem;
 
             /* Dynamic Primary Color */
-            --primary: <?=esc($headerColor)?>;
+            --primary:
+                <?= esc($headerColor) ?>
+            ;
             --primary-dark: #020617;
             --accent: #f59e0b;
             --bg-body: #f8fafc;
-            --sidebar-bg: <?=esc($headerColor)?>;
+            --sidebar-bg:
+                <?= esc($headerColor) ?>
+            ;
             --sidebar-text: #94a3b8;
             --sidebar-active: #ffffff;
             --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -316,10 +320,10 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'SISTEM S
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
         }
     </style>
-    <?= $this->renderSection('styles')?>
+    <?= $this->renderSection('styles') ?>
 </head>
 
-<body class="role-<?= $role?>">
+<body class="role-<?= $role ?>">
 
     <!-- Backdrop for Mobile -->
     <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
@@ -329,68 +333,69 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'SISTEM S
         <div class="sidebar-header">
             <div class="d-flex flex-column align-items-center gap-2 text-center">
                 <?php if ($logoSidebar): ?>
-                <img src="<?= base_url($logoSidebar)?>" alt="Logo" style="height: 50px; width: auto;">
-                <?php
-else: ?>
-                <div class="flex-shrink-0">
-                    <i class="bi bi-geo-fill text-white fs-1"></i>
-                </div>
-                <?php
-endif; ?>
+                    <img src="<?= base_url($logoSidebar) ?>" alt="Logo" style="height: 50px; width: auto;">
+                    <?php
+                else: ?>
+                    <div class="flex-shrink-0">
+                        <i class="bi bi-geo-fill text-white fs-1"></i>
+                    </div>
+                    <?php
+                endif; ?>
                 <div class="brand-text">
                     <div class="fw-800 fs-6 lh-1 text-white">
-                        <?= esc($appName)?>
+                        <?= esc($appName) ?>
                     </div>
                     <div class="small fw-600 opacity-75 mt-2" style="font-size: 0.65rem; letter-spacing: 0.5px;">
-                        <?= esc($appSubtitle)?>
+                        <?= esc($appSubtitle) ?>
                     </div>
                 </div>
             </div>
             <!-- Close button for mobile -->
-            <button class="btn border-0 text-white ms-auto d-lg-none p-0 position-absolute end-0 top-0 m-2" id="closeSidebar">
+            <button class="btn border-0 text-white ms-auto d-lg-none p-0 position-absolute end-0 top-0 m-2"
+                id="closeSidebar">
                 <i class="bi bi-x-lg fs-4"></i>
             </button>
         </div>
 
         <div class="sidebar-menu">
-            <div class="menu-label">Main Navigation</div>
-            <a href="<?= base_url('dashboard')?>"
-                class="sidebar-link <?=(uri_string() == 'dashboard') ? 'active' : ''?>">
-                <i class="bi bi-speedometer2"></i> <span>Dashboard Overview</span>
+            <div class="menu-label">Navigasi Utama</div>
+            <a href="<?= base_url('dashboard') ?>"
+                class="sidebar-link <?= (uri_string() == 'dashboard') ? 'active' : '' ?>">
+                <i class="bi bi-speedometer2"></i> <span>Ringkasan Beranda</span>
             </a>
 
-            <div class="menu-label">Spatial Data Management</div>
-            <a href="<?= base_url('admin/rdtr')?>"
-                class="sidebar-link <?=(strpos(uri_string(), 'admin/rdtr') !== false) ? 'active' : ''?>">
+            <div class="menu-label">Manajemen Data Spasial</div>
+            <a href="<?= base_url('admin/rdtr') ?>"
+                class="sidebar-link <?= (strpos(uri_string(), 'admin/rdtr') !== false) ? 'active' : '' ?>">
                 <i class="bi bi-map"></i> <span>Rencana Detail (RDTR)</span>
             </a>
-            <a href="<?= base_url('admin/rtrw')?>"
-                class="sidebar-link <?=(strpos(uri_string(), 'admin/rtrw') !== false) ? 'active' : ''?>">
+            <a href="<?= base_url('admin/rtrw') ?>"
+                class="sidebar-link <?= (strpos(uri_string(), 'admin/rtrw') !== false) ? 'active' : '' ?>">
                 <i class="bi bi-layers"></i> <span>Kawasan Wilayah (RTRW)</span>
             </a>
 
-            <a href="<?= base_url('admin/settings')?>"
-                class="sidebar-link <?=(uri_string() == 'admin/settings') ? 'active' : ''?>">
-                <i class="bi bi-sliders2"></i> <span>System Configuration</span>
+            <a href="<?= base_url('admin/settings') ?>"
+                class="sidebar-link <?= (uri_string() == 'admin/settings') ? 'active' : '' ?>">
+                <i class="bi bi-sliders2"></i> <span>Konfigurasi Sistem</span>
             </a>
 
             <?php if ($role == 'admin'): ?>
-            <div class="menu-label">Super Administrator</div>
-            <a href="<?= base_url('admin/audit-logs')?>"
-                class="sidebar-link <?=(strpos(uri_string(), 'admin/audit-logs') !== false) ? 'active' : ''?>">
-                <i class="bi bi-journal-text"></i> <span>Audit Activity Logs</span>
-            </a>
-            <a href="<?= base_url('admin/users')?>"
-                class="sidebar-link <?=(strpos(uri_string(), 'admin/users') !== false) ? 'active' : ''?>">
-                <i class="bi bi-people"></i> <span>Staff Management</span>
-            </a>
-            <?php
-endif; ?>
+                <div class="menu-label">Administrator Utama</div>
+                <a href="<?= base_url('admin/audit-logs') ?>"
+                    class="sidebar-link <?= (strpos(uri_string(), 'admin/audit-logs') !== false) ? 'active' : '' ?>">
+                    <i class="bi bi-journal-text"></i> <span>Log Aktivitas Sistem</span>
+                </a>
+                <a href="<?= base_url('admin/users') ?>"
+                    class="sidebar-link <?= (strpos(uri_string(), 'admin/users') !== false) ? 'active' : '' ?>">
+                    <i class="bi bi-people"></i> <span>Manajemen Staf</span>
+                </a>
+                <?php
+            endif; ?>
 
             <div class="mt-auto pt-4 shadow-none">
-                <a href="<?= base_url('auth/logout')?>"
+                <a href="<?= base_url('auth/logout') ?>"
                     class="sidebar-link text-danger border-top border-white border-opacity-10 pt-4 rounded-0">
-                    <i class="bi bi-box-arrow-right"></i> <span>Sign Out Portal</span>
+                    <i class="bi bi-box-arrow-right"></i> <span>Keluar Portal</span>
                 </a>
             </div>
         </div>
@@ -413,13 +418,13 @@ endif; ?>
             <div class="d-flex align-items-center w-100">
                 <div class="d-none d-sm-flex flex-column">
                     <h5 class="mb-0 fw-800 text-dark">
-                        <?= $this->renderSection('title')?>
+                        <?= $this->renderSection('title') ?>
                     </h5>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0" style="--bs-breadcrumb-divider: '•';">
-                            <li class="breadcrumb-item small fw-600 text-muted">Management</li>
+                            <li class="breadcrumb-item small fw-600 text-muted">Panel Administrasi</li>
                             <li class="breadcrumb-item small fw-600 active text-primary">
-                                <?= $this->renderSection('title')?>
+                                <?= $this->renderSection('title') ?>
                             </li>
                         </ol>
                     </nav>
@@ -435,35 +440,35 @@ endif; ?>
 
                     <div class="d-none d-md-flex flex-column text-end">
                         <span class="small fw-800 text-dark">
-                            <?= session()->get('username')?>
+                            <?= session()->get('username') ?>
                         </span>
-                        <span class="role-badge badge-<?= $role?>">
-                            <?= ucfirst($role)?> Access
+                        <span class="role-badge badge-<?= $role ?>">
+                            Hak Akses <?= ucfirst($role) ?>
                         </span>
                     </div>
                     <div class="dropdown">
                         <a href="#" class="d-block" data-bs-toggle="dropdown">
-                            <img src="https://ui-avatars.com/api/?name=<?= session()->get('username')?>&background=random&size=40"
+                            <img src="https://ui-avatars.com/api/?name=<?= session()->get('username') ?>&background=random&size=40"
                                 alt="Avatar" class="rounded-pill border border-2 border-white shadow-sm">
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2 mt-3"
                             style="border-radius: 1rem; min-width: 200px;">
                             <li class="d-md-none p-3 border-bottom mb-2">
                                 <div class="fw-800 mb-0">
-                                    <?= session()->get('username')?>
+                                    <?= session()->get('username') ?>
                                 </div>
                                 <div class="small text-muted">
-                                    <?= ucfirst($role)?> Profile
+                                    <?= ucfirst($role) ?> Profile
                                 </div>
                             </li>
-                            <li><a class="dropdown-item rounded-3 py-2 fw-600" href="<?= base_url('admin/settings')?>">
+                            <li><a class="dropdown-item rounded-3 py-2 fw-600" href="<?= base_url('admin/settings') ?>">
                                     <i class="bi bi-person me-2"></i> Profil & Pengaturan</a></li>
                             <li>
                                 <hr class="dropdown-divider opacity-50">
                             </li>
                             <li><a class="dropdown-item rounded-3 py-2 fw-600 text-danger"
-                                    href="<?= base_url('auth/logout')?>">
-                                    <i class="bi bi-box-arrow-right me-2"></i> Log Out</a></li>
+                                    href="<?= base_url('auth/logout') ?>">
+                                    <i class="bi bi-box-arrow-right me-2"></i> Keluar</a></li>
                         </ul>
                     </div>
                 </div>
@@ -472,7 +477,7 @@ endif; ?>
 
         <!-- Content Area -->
         <div class="content-area">
-            <?= $this->renderSection('content')?>
+            <?= $this->renderSection('content') ?>
         </div>
     </div>
 
@@ -521,7 +526,7 @@ endif; ?>
             }
         });
     </script>
-    <?= $this->renderSection('scripts')?>
+    <?= $this->renderSection('scripts') ?>
 </body>
 
 </html>

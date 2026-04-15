@@ -1,12 +1,12 @@
-<?php /** @var \CodeIgniter\View\View $this */?>
-<?php $this->extend('layouts/admin')?>
+<?php /** @var \CodeIgniter\View\View $this */ ?>
+<?php $this->extend('layouts/admin') ?>
 
-<?php $this->section('title')?>
+<?php $this->section('title') ?>
 Edit Profil Zona:
-<?= esc($zone['nama_zona'])?>
-<?php $this->endSection()?>
+<?= esc($zone['nama_zona']) ?>
+<?php $this->endSection() ?>
 
-<?php $this->section('styles')?>
+<?php $this->section('styles') ?>
 <style>
     .wizard-nav {
         display: flex;
@@ -124,24 +124,24 @@ Edit Profil Zona:
         color: #991b1b;
     }
 </style>
-<?php $this->endSection()?>
+<?php $this->endSection() ?>
 
-<?php $this->section('content')?>
+<?php $this->section('content') ?>
 <div class="row justify-content-center">
     <div class="col-xl-11">
         <?php if (session()->getFlashdata('success')): ?>
-        <div class="alert alert-success border-0 shadow-sm rounded-4 p-3 mb-4">
-            <div class="d-flex align-items-center gap-2">
-                <i class="bi bi-check-circle-fill fs-5"></i>
-                <div class="fw-700 small">
-                    <?= session()->getFlashdata('success')?>
+            <div class="alert alert-success border-0 shadow-sm rounded-4 p-3 mb-4">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-check-circle-fill fs-5"></i>
+                    <div class="fw-700 small">
+                        <?= session()->getFlashdata('success') ?>
+                    </div>
                 </div>
             </div>
-        </div>
-        <?php
-endif; ?>
+            <?php
+        endif; ?>
 
-        <form action="<?= base_url('admin/rdtr/update/' . $zone['id'])?>" method="post" id="rdtrEditForm">
+        <form action="<?= base_url('admin/rdtr/update/' . $zone['id']) ?>" method="post" id="rdtrEditForm">
             <!-- Wizard Navigation -->
             <div class="wizard-nav overflow-auto">
                 <div class="wizard-step active" onclick="showTab('tab-info')" id="step-info">
@@ -176,31 +176,31 @@ endif; ?>
                                 <label class="form-label fw-700 small text-uppercase text-muted">Kode Zona <span
                                         class="text-danger">*</span></label>
                                 <input type="text" name="nama_zona" class="form-control form-control-lg fs-6 fw-600"
-                                    value="<?= esc($zone['nama_zona'])?>" required>
+                                    value="<?= esc($zone['nama_zona']) ?>" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-700 small text-uppercase text-muted">Sub Zona</label>
                                 <input type="text" name="sub_zona" class="form-control form-control-lg fs-6 fw-600"
-                                    value="<?= esc($zone['sub_zona'] ?? '')?>">
+                                    value="<?= esc($zone['sub_zona'] ?? '') ?>">
                             </div>
                             <div class="col-12">
                                 <label class="form-label fw-700 small text-uppercase text-muted">Deskripsi Peruntukan
                                     <span class="text-danger">*</span></label>
                                 <textarea name="peruntukan" class="form-control fw-600" rows="3"
-                                    required><?= esc($zone['peruntukan'])?></textarea>
+                                    required><?= esc($zone['peruntukan']) ?></textarea>
                             </div>
                             <div class="col-12">
                                 <label class="form-label fw-700 small text-uppercase text-muted">Arahan
                                     Pemanfaatan</label>
                                 <textarea name="arahan_pemanfaatan" class="form-control fw-600"
-                                    rows="3"><?= esc($zone['arahan_pemanfaatan'] ?? '')?></textarea>
+                                    rows="3"><?= esc($zone['arahan_pemanfaatan'] ?? '') ?></textarea>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-700 small text-uppercase text-muted">Warna Map
                                     Legend</label>
                                 <div class="p-2 border rounded-3 d-flex align-items-center gap-3 bg-light">
                                     <input type="color" name="color" class="form-control form-control-color border-0"
-                                        value="<?= esc($zone['color'] ?? '#3b82f6')?>">
+                                        value="<?= esc($zone['color'] ?? '#3b82f6') ?>">
                                     <span class="small fw-800 text-muted">Pick Identity Color</span>
                                 </div>
                             </div>
@@ -208,7 +208,7 @@ endif; ?>
                                 <label class="form-label fw-700 small text-uppercase text-muted">Rujukan
                                     Regulasi</label>
                                 <input type="text" name="regulation_text" class="form-control fw-600"
-                                    value="<?= esc($zone['regulation_text'] ?? '')?>">
+                                    value="<?= esc($zone['regulation_text'] ?? '') ?>">
                             </div>
                         </div>
 
@@ -226,66 +226,80 @@ endif; ?>
                             <div class="col-md-6">
                                 <div class="range-control-card">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <label class="fw-800 small text-muted text-uppercase">KDB (%)</label>
+                                        <label class="fw-800 small text-muted text-uppercase">KDB (%) <i
+                                                class="bi bi-info-circle ms-1" data-bs-toggle="tooltip"
+                                                title="Koefisien Dasar Bangunan: Batas maksimal luas lantai dasar."></i></label>
                                         <span class="range-value-badge" id="kdb-val">
-                                            <?= esc($zone['kdb'] ?? 0)?>%
+                                            <?= esc($zone['kdb'] ?? 0) ?>%
                                         </span>
                                     </div>
                                     <input type="range" name="kdb" class="form-range" min="0" max="100" step="5"
-                                        value="<?= esc($zone['kdb'] ?? 0)?>" id="kdb-in">
+                                        value="<?= esc($zone['kdb'] ?? 0) ?>" id="kdb-in">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="range-control-card">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <label class="fw-800 small text-muted text-uppercase">KLB (Ratio)</label>
+                                        <label class="fw-800 small text-muted text-uppercase">KLB (Ratio) <i
+                                                class="bi bi-info-circle ms-1" data-bs-toggle="tooltip"
+                                                title="Koefisien Lantai Bangunan: Batas maksimal total luas seluruh lantai."></i></label>
                                         <span class="range-value-badge" id="klb-val">
-                                            <?= esc($zone['klb'] ?? 0)?>
+                                            <?= esc($zone['klb'] ?? 0) ?>
                                         </span>
                                     </div>
                                     <input type="range" name="klb" class="form-range" min="0" max="10" step="0.5"
-                                        value="<?= esc($zone['klb'] ?? 0)?>" id="klb-in">
+                                        value="<?= esc($zone['klb'] ?? 0) ?>" id="klb-in">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="range-control-card">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <label class="fw-800 small text-muted text-uppercase">KDH (%)</label>
+                                        <label class="fw-800 small text-muted text-uppercase">KDH (%) <i
+                                                class="bi bi-info-circle ms-1" data-bs-toggle="tooltip"
+                                                title="Koefisien Dasar Hijau: Minimal luas area terbuka untuk resapan air."></i></label>
                                         <span class="range-value-badge" id="kdh-val">
-                                            <?= esc($zone['kdh'] ?? 0)?>%
+                                            <?= esc($zone['kdh'] ?? 0) ?>%
                                         </span>
                                     </div>
                                     <input type="range" name="kdh" class="form-range" min="0" max="100" step="5"
-                                        value="<?= esc($zone['kdh'] ?? 0)?>" id="kdh-in">
+                                        value="<?= esc($zone['kdh'] ?? 0) ?>" id="kdh-in">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="range-control-card">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <label class="fw-800 small text-muted text-uppercase">KTB (%)</label>
+                                        <label class="fw-800 small text-muted text-uppercase">KTB (%) <i
+                                                class="bi bi-info-circle ms-1" data-bs-toggle="tooltip"
+                                                title="Koefisien Tapak Basement: Batas maksimal luas lantai bawah tanah."></i></label>
                                         <span class="range-value-badge" id="ktb-val">
-                                            <?= esc($zone['ktb'] ?? 0)?>%
+                                            <?= esc($zone['ktb'] ?? 0) ?>%
                                         </span>
                                     </div>
                                     <input type="range" name="ktb" class="form-range" min="0" max="100" step="5"
-                                        value="<?= esc($zone['ktb'] ?? 0)?>" id="ktb-in">
+                                        value="<?= esc($zone['ktb'] ?? 0) ?>" id="ktb-in">
                                 </div>
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label fw-800 small text-muted">KETINGGIAN (M)</label>
+                                <label class="form-label fw-800 small text-muted">KETINGGIAN (M) <i
+                                        class="bi bi-info-circle ms-1" data-bs-toggle="tooltip"
+                                        title="Batas maksimal tinggi bangunan dari permukaan tanah."></i></label>
                                 <input type="number" name="ketinggian_max" class="form-control"
-                                    value="<?= esc($zone['ketinggian_max'] ?? '')?>">
+                                    value="<?= esc($zone['ketinggian_max'] ?? '') ?>">
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label fw-800 small text-muted">GSB (M)</label>
+                                <label class="form-label fw-800 small text-muted">GSB (M) <i
+                                        class="bi bi-info-circle ms-1" data-bs-toggle="tooltip"
+                                        title="Garis Sempadan Bangunan: Batas minimal bangunan dari tepi jalan."></i></label>
                                 <input type="number" name="gsb" class="form-control"
-                                    value="<?= esc($zone['gsb'] ?? '')?>">
+                                    value="<?= esc($zone['gsb'] ?? '') ?>">
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label fw-800 small text-muted">GSL (M)</label>
+                                <label class="form-label fw-800 small text-muted">GSL (M) <i
+                                        class="bi bi-info-circle ms-1" data-bs-toggle="tooltip"
+                                        title="Garis Sempadan Lahan: Batas minimal pekarangan."></i></label>
                                 <input type="number" name="gsl" class="form-control"
-                                    value="<?= esc($zone['gsl'] ?? '')?>">
+                                    value="<?= esc($zone['gsl'] ?? '') ?>">
                             </div>
                         </div>
 
@@ -327,41 +341,41 @@ endif; ?>
                                 </thead>
                                 <tbody>
                                     <?php if (empty($activities)): ?>
-                                    <tr>
-                                        <td colspan="4" class="text-center py-5 text-muted small fw-600">Belum ada
-                                            aturan kegiatan yang didefinisikan.</td>
-                                    </tr>
-                                    <?php
-else: ?>
-                                    <?php foreach ($activities as $act): ?>
-                                    <tr class="activity-row">
-                                        <td class="ps-4">
-                                            <div class="fw-800 text-dark">
-                                                <?= esc($act['nama_kegiatan'])?>
-                                            </div>
-                                            <div class="small text-muted fw-600">
-                                                <?= esc($act['kategori_kegiatan'])?>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="status-pill status-<?= $act['status']?>">
-                                                <?= $act['status'] == 'I' ? 'Diizinkan' : ($act['status'] == 'T' ? 'Terbatas' : ($act['status'] == 'B' ? 'Bersyarat' : 'Dilarang'))?>
-                                            </span>
-                                        </td>
-                                        <td class="small fw-600 text-muted">
-                                            <?= esc($act['syarat'] ?? '-')?>
-                                        </td>
-                                        <td class="text-end pe-4">
-                                            <button type="button" class="btn btn-link text-danger delete-activity p-0"
-                                                data-id="<?= $act['id']?>">
-                                                <i class="bi bi-trash-fill"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <?php
-    endforeach; ?>
-                                    <?php
-endif; ?>
+                                        <tr>
+                                            <td colspan="4" class="text-center py-5 text-muted small fw-600">Belum ada
+                                                aturan kegiatan yang didefinisikan.</td>
+                                        </tr>
+                                        <?php
+                                    else: ?>
+                                        <?php foreach ($activities as $act): ?>
+                                            <tr class="activity-row">
+                                                <td class="ps-4">
+                                                    <div class="fw-800 text-dark">
+                                                        <?= esc($act['nama_kegiatan']) ?>
+                                                    </div>
+                                                    <div class="small text-muted fw-600">
+                                                        <?= esc($act['kategori_kegiatan']) ?>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="status-pill status-<?= $act['status'] ?>">
+                                                        <?= $act['status'] == 'I' ? 'Diizinkan' : ($act['status'] == 'T' ? 'Terbatas' : ($act['status'] == 'B' ? 'Bersyarat' : 'Dilarang')) ?>
+                                                    </span>
+                                                </td>
+                                                <td class="small fw-600 text-muted">
+                                                    <?= esc($act['syarat'] ?? '-') ?>
+                                                </td>
+                                                <td class="text-end pe-4">
+                                                    <button type="button" class="btn btn-link text-danger delete-activity p-0"
+                                                        data-id="<?= $act['id'] ?>">
+                                                        <i class="bi bi-trash-fill"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                        endforeach; ?>
+                                        <?php
+                                    endif; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -372,7 +386,7 @@ endif; ?>
                                 <i class="bi bi-arrow-left me-2"></i> KEMBALI
                             </button>
                             <div class="d-flex gap-2">
-                                <a href="<?= base_url('admin/rdtr')?>"
+                                <a href="<?= base_url('admin/rdtr') ?>"
                                     class="btn btn-light px-4 py-2 fw-700 rounded-3 text-muted">CANCEL</a>
                                 <button type="submit" class="btn btn-primary px-5 py-2 fw-700 rounded-3 shadow">
                                     <i class="bi bi-cloud-check-fill me-2"></i> UPDATE SEMUA DATA
@@ -395,20 +409,21 @@ endif; ?>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <form id="addActivityForm">
-                <div class="modal-body p-4">
-                    <input type="hidden" name="rdtr_zone_id" value="<?= $zone['id']?>">
+                <?= csrf_field() ?>
+                <input type="hidden" name="rdtr_zone_id" value="<?= $zone['id'] ?>">
 
+                <div class="modal-body p-4">
                     <div class="mb-4">
                         <label class="form-label small fw-800 text-muted text-uppercase">Gunakan Template</label>
                         <select class="form-select fw-600" id="templateSelect">
                             <option value="">-- Pilih Preset --</option>
                             <?php foreach ($templates as $tpl): ?>
-                            <option value="<?= esc($tpl['nama_kegiatan'])?>"
-                                data-kategori="<?= esc($tpl['kategori'])?>">
-                                <?= esc($tpl['nama_kegiatan'])?>
-                            </option>
-                            <?php
-endforeach; ?>
+                                <option value="<?= esc($tpl['nama_kegiatan']) ?>"
+                                    data-kategori="<?= esc($tpl['kategori']) ?>">
+                                    <?= esc($tpl['nama_kegiatan']) ?>
+                                </option>
+                                <?php
+                            endforeach; ?>
                         </select>
                     </div>
 
@@ -450,9 +465,9 @@ endforeach; ?>
         </div>
     </div>
 </div>
-<?php $this->endSection()?>
+<?php $this->endSection() ?>
 
-<?php $this->section('scripts')?>
+<?php $this->section('scripts') ?>
 <script>
     function showTab(tabId) {
         document.querySelectorAll('.tab-content-wizard').forEach(t => t.classList.add('d-none'));
@@ -493,7 +508,7 @@ endforeach; ?>
         btn.disabled = true;
         btn.innerHTML = 'Saving...';
 
-        fetch('<?= base_url('admin / rdtr / add - activity')?>', {
+        fetch('<?= base_url('admin/rdtr/add-activity') ?>', {
             method: 'POST', body: new FormData(this),
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
@@ -505,7 +520,7 @@ endforeach; ?>
     document.querySelectorAll('.delete-activity').forEach(btn => {
         btn.addEventListener('click', function () {
             if (!confirm('Hapus aturan ini?')) return;
-            fetch('<?= base_url('admin / rdtr / delete -activity')?>/' + this.dataset.id, {
+            fetch('<?= base_url('admin/rdtr/delete-activity') ?>/' + this.dataset.id, {
                 method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
                 .then(r => r.json())
@@ -513,9 +528,9 @@ endforeach; ?>
         });
     });
 </script>
-<?php $this->endSection()?>
+<?php $this->endSection() ?>
 
-<?php $this->section('scripts')?>
+<?php $this->section('scripts') ?>
 <script>
     // Range slider handlers
     const sliders = ['kdb', 'klb', 'kdh', 'ktb'];
@@ -546,11 +561,12 @@ endforeach; ?>
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Menyimpan...';
 
-        fetch('<?= base_url('admin / rdtr / add - activity')?>', {
+        fetch('<?= base_url('admin/rdtr/add-activity') ?>', {
             method: 'POST',
             body: formData,
             headers: {
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest',
+                '<?= csrf_header() ?>': '<?= csrf_hash() ?>'
             }
         })
             .then(response => response.json())
@@ -577,10 +593,11 @@ endforeach; ?>
             if (!confirm('Yakin ingin menghapus kegiatan ini dari zona?')) return;
 
             const id = this.getAttribute('data-id');
-            fetch('<?= base_url('admin / rdtr / delete -activity')?>/' + id, {
+            fetch('<?= base_url('admin/rdtr/delete-activity') ?>/' + id, {
                 method: 'POST',
                 headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
+                    'X-Requested-With': 'XMLHttpRequest',
+                    '<?= csrf_header() ?>': '<?= csrf_hash() ?>'
                 }
             })
                 .then(response => response.json())
@@ -594,4 +611,4 @@ endforeach; ?>
         });
     });
 </script>
-<?php $this->endSection()?>
+<?php $this->endSection() ?>

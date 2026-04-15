@@ -9,6 +9,16 @@ class Dashboard extends BaseController
 {
     public function index()
     {
-        return view('admin/dashboard');
+        $rdtrModel = new \App\Models\RdtrModel();
+        $rtrwModel = new \App\Models\RtrwModel();
+        $userModel = new \App\Models\UserModel();
+
+        $data = [
+            'count_rdtr' => $rdtrModel->countAllResults(),
+            'count_rtrw' => $rtrwModel->countAllResults(),
+            'count_users' => $userModel->countAllResults(),
+        ];
+
+        return view('admin/dashboard', $data);
     }
 }
