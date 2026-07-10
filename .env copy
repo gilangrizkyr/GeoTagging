@@ -4,22 +4,20 @@
 
 CI_ENVIRONMENT = development
 
-CI_ENVIRONMENT = production
-
 #--------------------------------------------------------------------
 # APP
 #--------------------------------------------------------------------
 
-app.baseURL = 'http://localhost:8080'
+app.baseURL = 'http://localhost:8080/'
 
 #--------------------------------------------------------------------
 # DATABASE
 #--------------------------------------------------------------------
 
-database.default.hostname = host.docker.internal
+database.default.hostname = localhost
 database.default.database = geotagging_db
 database.default.username = postgres
-database.default.password = 
+database.default.password = postgres
 database.default.DBDriver = Postgre
 database.default.port = 5432
 
@@ -28,3 +26,9 @@ database.default.port = 5432
 #--------------------------------------------------------------------
 
 # logger.threshold = 4
+
+#--------------------------------------------------------------------
+# STORAGE
+#--------------------------------------------------------------------
+
+UPLOAD_PATH = '/uploads/'
