@@ -32,8 +32,7 @@ class RdtrController extends BaseController
 
         if ($uploadType === 'geojson') {
             $rules['geojson_file'] = 'uploaded[geojson_file]|ext_in[geojson_file,json,geojson]|max_size[geojson_file,5120]';
-        }
-        elseif ($uploadType === 'shapefile') {
+        } elseif ($uploadType === 'shapefile') {
             $rules['shp_file'] = 'uploaded[shp_file]|ext_in[shp_file,shp]';
             $rules['shx_file'] = 'uploaded[shx_file]|ext_in[shx_file,shx]';
             $rules['dbf_file'] = 'uploaded[dbf_file]|ext_in[dbf_file,dbf]';
@@ -57,15 +56,12 @@ class RdtrController extends BaseController
 
             if ($json['type'] === 'FeatureCollection' && !empty($json['features'])) {
                 $geometry = json_encode($json['features'][0]['geometry']);
-            }
-            elseif ($json['type'] === 'Feature') {
+            } elseif ($json['type'] === 'Feature') {
                 $geometry = json_encode($json['geometry']);
-            }
-            else {
+            } else {
                 $geometry = $geoJsonContent;
             }
-        }
-        elseif ($uploadType === 'shapefile') {
+        } elseif ($uploadType === 'shapefile') {
             // Handle Shapefile upload
             $shpParser = new \App\Libraries\ShapefileParser();
 
@@ -93,8 +89,7 @@ class RdtrController extends BaseController
             // Extract first feature geometry
             if (isset($geoJsonArray['features'][0]['geometry'])) {
                 $geometry = json_encode($geoJsonArray['features'][0]['geometry']);
-            }
-            else {
+            } else {
                 return redirect()->back()->withInput()->with('error', 'No geometry found in Shapefile.');
             }
         }
@@ -116,13 +111,18 @@ class RdtrController extends BaseController
             'gsl' => $this->nullIfEmpty($this->request->getPost('gsl')),
             'sub_zona' => $this->request->getPost('sub_zona'),
             'arahan_pemanfaatan' => $this->request->getPost('arahan_pemanfaatan'),
+            // Provenance fields (sumber data dari PU)
+            'sumber_data' => $this->request->getPost('sumber_data'),
+            'tanggal_berlaku' => $this->nullIfEmpty($this->request->getPost('tanggal_berlaku')),
+            'versi_data' => $this->request->getPost('versi_data'),
+            'keterangan_sumber' => $this->request->getPost('keterangan_sumber'),
+            'created_by' => session()->get('username') ?? session()->get('email') ?? 'admin',
         ];
 
         $model = new \App\Models\RdtrModel();
         if ($model->insertGeoJSON($data, $geometry)) {
             return redirect()->to('admin/rdtr')->with('success', 'Data RDTR berhasil disimpan.');
-        }
-        else {
+        } else {
             return redirect()->back()->withInput()->with('error', 'Failed to save data to database.');
         }
     }
@@ -183,6 +183,11 @@ class RdtrController extends BaseController
             'gsl' => $this->nullIfEmpty($this->request->getPost('gsl')),
             'sub_zona' => $this->request->getPost('sub_zona'),
             'arahan_pemanfaatan' => $this->request->getPost('arahan_pemanfaatan'),
+            // Provenance fields
+            'sumber_data' => $this->request->getPost('sumber_data'),
+            'tanggal_berlaku' => $this->nullIfEmpty($this->request->getPost('tanggal_berlaku')),
+            'versi_data' => $this->request->getPost('versi_data'),
+            'keterangan_sumber' => $this->request->getPost('keterangan_sumber'),
         ];
 
         $model->update($id, $data);

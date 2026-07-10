@@ -75,3 +75,7 @@ $routes->group('api', function ($routes) {
     $routes->resource('rdtr', ['controller' => 'Api\Rdtr', 'filter' => 'auth']);
     $routes->resource('rtrw', ['controller' => 'Api\Rtrw', 'filter' => 'auth']);
 });
+
+// Media Serving (Public Access for registered assets)
+$routes->get('media/serve/(:any)', 'Media::serve/$1');
+$routes->get('media/download/(:any)', 'Media::download/$1');

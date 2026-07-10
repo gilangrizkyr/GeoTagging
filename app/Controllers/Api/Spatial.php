@@ -231,6 +231,9 @@ class Spatial extends BaseController
                 'sub_zona' => $rdtrResult['sub_zona'],
                 'peruntukan' => $rdtrResult['peruntukan'],
                 'regulation_text' => $rdtrResult['regulation_text'],
+                'sumber_data' => $rdtrResult['sumber_data'],
+                'tanggal_berlaku' => $rdtrResult['tanggal_berlaku'],
+                'versi_data' => $rdtrResult['versi_data'],
                 'itbx' => [
                     'kdb' => $rdtrResult['kdb'],
                     'klb' => $rdtrResult['klb'],
@@ -262,6 +265,40 @@ class Spatial extends BaseController
         $settingsModel = new \App\Models\SettingsModel();
         $data['app_name'] = $settingsModel->getValue('app_name', 'Geotagging App');
         $data['app_logo'] = $settingsModel->getValue('logo_sidebar', '');
+
+        // Officer Info for PDF Signature
+        $data['pejabat'] = [
+            'nama' => $settingsModel->getValue('kepala_dinas_nama', 'Dr. H. Andi Aminuddin, S.Pd., MM'),
+            'nip' => $settingsModel->getValue('kepala_dinas_nip', '19671231 199003 1 122'),
+            'jabatan' => $settingsModel->getValue('kepala_dinas_jabatan', 'Kepala Dinas'),
+            'lokasi' => $settingsModel->getValue('kepala_dinas_lokasi', 'Tanah Bumbu'),
+        ];
+        $data['show_qr'] = $settingsModel->getValue('pdf_show_qr', '1') == '1';
+
+        // Agency Branding
+        $data['agency_main_name'] = $settingsModel->getValue('agency_main_name', 'PEMERINTAH KABUPATEN TANAH BUMBU');
+        $data['agency_sub_name'] = $settingsModel->getValue('agency_sub_name', 'DINAS PENANAMAN MODAL DAN PELAYANAN TERPADU SATU PINTU');
+        $data['agency_address'] = $settingsModel->getValue('agency_address', 'Jl. Dharma Praja No. 1, Kel. Gunung Tinggi, Kec. Batulicin, Kab. Tanah Bumbu');
+        $data['agency_contact'] = $settingsModel->getValue('agency_contact', 'Email: dpmptsp@tanahbumbukab.go.id | Website: dpmptsp.tanahbumbukab.go.id');
+        $data['pdf_disclaimer'] = $settingsModel->getValue('pdf_disclaimer', "1. Laporan ini merupakan hasil analisis otomatis sistem informasi geospasial sebagai instrumen bantu pelayanan publik.\n2. Dokumen ini bersifat INDIKATIF dan digunakan hanya sebagai informasi awal kesesuaian ruang bagi pemohon.\n3. Laporan ini BUKAN merupakan dokumen Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang (PKKPR) resmi.\n4. Validasi legalitas akhir tetap mengacu pada sistem OSS-RBA dan verifikasi faktual lapangan oleh tenaga teknis terkait.");
+
+        // LOGGING & REPORT NUMBERING
+        $auditModel = new \App\Models\AuditLogModel();
+        $logId = $auditModel->insert([
+            'user_id' => session()->get('user_id'),
+            'search_lat' => $lat,
+            'search_lng' => $lng,
+            'search_time' => date('Y-m-d H:i:s'),
+            'result_summary' => json_encode([
+                'rdtr_found' => !empty($rdtrResult),
+                'rdtr_zona' => $rdtrResult['nama_zona'] ?? null,
+                'rtrw_found' => !empty($rtrwResult),
+                'kbli_validation' => $data['kbli_validation'] ?? null
+            ])
+        ]);
+
+        // Sequential Report Numbering
+        $data['report_no'] = date('Y/m/d') . '/GEO/' . str_pad($logId, 5, '0', STR_PAD_LEFT);
 
         return view('spatial/analysis_report', $data);
     }

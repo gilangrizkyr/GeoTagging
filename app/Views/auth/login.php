@@ -7,11 +7,12 @@ $appLogo = $settingsModel->getValue('logo_login', '');
 $headerColor = $settingsModel->getValue('header_color', '#0f172a');
 ?>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Access -
-        <?= esc($appName)?>
+        <?= esc($appName) ?>
     </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,9 +48,17 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
         }
 
         @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         /* Animated background blobs */
@@ -80,8 +89,13 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
         }
 
         @keyframes float {
-            from { transform: translate(0, 0); }
-            to { transform: translate(100px, 100px); }
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(100px, 100px);
+            }
         }
 
         .login-card {
@@ -124,8 +138,8 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 0% 0%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 100% 100%, rgba(39, 174, 96, 0.1) 0%, transparent 50%);
+            background: radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(39, 174, 96, 0.1) 0%, transparent 50%);
             pointer-events: none;
         }
 
@@ -248,13 +262,17 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
                 opacity: 0;
                 transform: translateY(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        h2, h3, h4, h5 {
+        h2,
+        h3,
+        h4,
+        h5 {
             font-family: 'Outfit', sans-serif;
             font-weight: 900;
         }
@@ -273,14 +291,17 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
             .login-sidebar {
                 display: none;
             }
+
             .login-form {
                 width: 100%;
                 padding: 50px;
             }
+
             .login-card {
                 min-height: auto;
                 border-radius: 24px;
             }
+
             body::before,
             body::after {
                 display: none;
@@ -288,6 +309,7 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
         }
     </style>
 </head>
+
 <body>
     <div class="login-card">
         <div class="login-sidebar">
@@ -298,19 +320,22 @@ $headerColor = $settingsModel->getValue('header_color', '#0f172a');
             <div class="position-relative z-1">
                 <div class="mb-4">
                     <?php if ($appLogo): ?>
-                    <img src="<?= base_url($appLogo)?>" alt="Logo" style="height: 120px; width: auto; display: inline-block;">
-                    <?php
-else: ?>
-                    <div class="rounded-4 d-flex align-items-center justify-content-center"
-                        style="width: 80px; height: 80px; background: rgba(255,255,255,0.2);">
-                        <i class="bi bi-shield-lock-fill fs-1 text-white"></i>
-                    </div>
-                    <?php
-endif; ?>
+                        <img src="<?= get_media_url($appLogo) ?>" alt="Logo"
+                            style="height: 120px; width: auto; display: inline-block;">
+                        <?php
+                    else: ?>
+                        <div class="rounded-4 d-flex align-items-center justify-content-center"
+                            style="width: 80px; height: 80px; background: rgba(255,255,255,0.2);">
+                            <i class="bi bi-shield-lock-fill fs-1 text-white"></i>
+                        </div>
+                        <?php
+                    endif; ?>
                 </div>
-                <h2 class="fw-800 mb-2 fs-1">Command Center</h2>
+                <h2 class="fw-800 mb-2 fs-1">
+                    <?= esc($settingsModel->getValue('login_sidebar_title', 'Command Center')) ?>
+                </h2>
                 <h4 class="fw-400 opacity-75 mb-4">
-                    <?= esc($appName)?>
+                    <?= esc($appName) ?>
                 </h4>
                 <div class="mt-5 pt-4 border-top border-white border-opacity-10">
                     <div class="d-flex align-items-center gap-3 mb-3">
@@ -324,20 +349,22 @@ endif; ?>
         </div>
         <div class="login-form">
             <div class="mb-5">
-                <h3 class="fw-800 text-dark mb-1">Administrator Login</h3>
+                <h3 class="fw-800 text-dark mb-1">
+                    <?= esc($settingsModel->getValue('login_form_title', 'Administrator Login')) ?>
+                </h3>
                 <p class="text-muted fw-500">Silakan masukkan kredensial untuk melanjutkan.</p>
             </div>
             <?php if (session()->getFlashdata('error')): ?>
-            <div
-                class="alert alert-danger border-0 bg-danger bg-opacity-10 text-danger py-3 rounded-4 small mb-4 d-flex align-items-center">
-                <i class="bi bi-exclamation-octagon-fill fs-5 me-3"></i>
-                <div class="fw-700">
-                    <?= session()->getFlashdata('error')?>
+                <div
+                    class="alert alert-danger border-0 bg-danger bg-opacity-10 text-danger py-3 rounded-4 small mb-4 d-flex align-items-center">
+                    <i class="bi bi-exclamation-octagon-fill fs-5 me-3"></i>
+                    <div class="fw-700">
+                        <?= session()->getFlashdata('error') ?>
+                    </div>
                 </div>
-            </div>
-            <?php
-endif; ?>
-            <form action="<?= base_url('auth/attemptLogin')?>" method="post">
+                <?php
+            endif; ?>
+            <form action="<?= base_url('auth/attemptLogin') ?>" method="post">
                 <div class="mb-4">
                     <label class="form-label small fw-800 text-uppercase text-muted mb-2"
                         style="font-size: 0.7rem; letter-spacing: 1px;">Username Account</label>
@@ -362,7 +389,7 @@ endif; ?>
                 </button>
             </form>
             <div class="mt-auto pt-5 text-center">
-                <a href="<?= base_url()?>"
+                <a href="<?= base_url() ?>"
                     class="text-decoration-none text-muted small fw-700 hover-primary d-flex align-items-center justify-content-center gap-2">
                     <i class="bi bi-house-door-fill"></i> KEMBALI KE PORTAL UTAMA
                 </a>
@@ -370,4 +397,5 @@ endif; ?>
         </div>
     </div>
 </body>
+
 </html>

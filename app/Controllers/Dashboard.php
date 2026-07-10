@@ -13,10 +13,16 @@ class Dashboard extends BaseController
         $rtrwModel = new \App\Models\RtrwModel();
         $userModel = new \App\Models\UserModel();
 
+        $auditModel = new \App\Models\AuditLogModel();
+
+        $today = date('Y-m-d');
+
         $data = [
             'count_rdtr' => $rdtrModel->countAllResults(),
             'count_rtrw' => $rtrwModel->countAllResults(),
             'count_users' => $userModel->countAllResults(),
+            'total_searches' => $auditModel->countAllResults(),
+            'today_searches' => $auditModel->where('DATE(search_time)', $today)->countAllResults(),
         ];
 
         return view('admin/dashboard', $data);

@@ -395,7 +395,7 @@
         <!-- Decorative Floating Badges -->
         <div class="hero-badge badge-top">
             <i class="bi bi-patch-check-fill text-primary" style="font-size: 1.5rem;"></i>
-           <div class="d-flex flex-column">
+            <div class="d-flex flex-column">
                 <span class="fw-800 text-dark" style="font-size: 0.85rem; line-height: 1.1;">Analisis Instan</span>
                 <span class="small text-muted fw-600" style="font-size: 0.7rem;">Hasil Real-time RDTR & RTRW</span>
             </div>
@@ -409,9 +409,10 @@
         </div> -->
 
         <div class="hero-content">
-            <h1>Transparansi <span>Tata Ruang</span> Tanah Bumbu</h1>
-            <p>Pusat data spasial terpadu untuk pemantauan rencana tata ruang, analisis investasi,
-                dan keterbukaan informasi publik Kabupaten Tanah Bumbu.</p>
+            <h1><?= nl2br($settingsModel->getValue('app_hero_title', 'Transparansi <span>Tata Ruang</span> Tanah Bumbu')) ?>
+            </h1>
+            <p><?= esc($settingsModel->getValue('app_hero_desc', 'Pusat data spasial terpadu untuk pemantauan rencana tata ruang, analisis investasi, dan keterbukaan informasi publik Kabupaten Tanah Bumbu.')) ?>
+            </p>
             <div class="d-flex gap-3 justify-content-center justify-content-lg-start">
                 <a href="<?= base_url('map') ?>"
                     class="btn btn-lg btn-primary rounded-pill px-5 py-3 fw-800 shadow-lg border-0">
@@ -427,7 +428,7 @@
                         <div class="carousel-inner h-100">
                             <?php foreach ($heroImages as $i => $img): ?>
                                 <div class="carousel-item <?= $i === 0 ? 'active' : '' ?> h-100">
-                                    <img src="<?= base_url($img['image_path']) ?>" class="d-block w-100 h-100"
+                                    <img src="<?= get_media_url($img['image_path']) ?>" class="d-block w-100 h-100"
                                         style="object-fit: cover;" alt="Hero Image <?= $i + 1 ?>">
                                 </div>
                             <?php endforeach; ?>
@@ -529,9 +530,12 @@
 
     <!-- CTA Glass Area -->
     <div class="main-cta">
-        <h2 class="fw-900 mb-3" style="font-size: 2.5rem;">Cek Lokasi Investasi Anda</h2>
-        <p class="mb-4 opacity-75 fw-600">Dapatkan informasi detail mengenai peruntukan zona dan regulasi pemanfaatan
-            ruang secara instan langsung dari peta.</p>
+        <h2 class="fw-900 mb-3" style="font-size: 2.5rem;">
+            <?= esc($settingsModel->getValue('app_cta_title', 'Cek Lokasi Investasi Anda')) ?>
+        </h2>
+        <p class="mb-4 opacity-75 fw-600">
+            <?= esc($settingsModel->getValue('app_cta_desc', 'Dapatkan informasi detail mengenai peruntukan zona dan regulasi pemanfaatan ruang secara instan langsung dari peta.')) ?>
+        </p>
         <a href="<?= base_url('map') ?>" class="cta-btn">
             <i class="bi bi-geo-alt-fill"></i> Buka Peta Sekarang
         </a>

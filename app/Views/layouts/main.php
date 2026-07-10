@@ -20,6 +20,13 @@ $ytUrl = $settingsModel->getValueWithRole('youtube_url', $role, '');
 $twUrl = $settingsModel->getValueWithRole('twitter_url', $role, '');
 $mapIframe = $settingsModel->getValueWithRole('office_map_iframe', $role, '');
 
+// Global Branding & Contact
+$appSlogan = $settingsModel->getValueWithRole('app_slogan', $role, 'Sistem Informasi Geospasial Terintegrasi');
+$copyrightText = $settingsModel->getValueWithRole('copyright_text', $role, 'DPMPTSP Tanah Bumbu');
+$contactEmail = $settingsModel->getValueWithRole('contact_email', $role, 'info@tanahbumbu.go.id');
+$contactPhone = $settingsModel->getValueWithRole('contact_phone', $role, '(0518) Hubungi Kami');
+$agencyFooterDesc = $settingsModel->getValueWithRole('agency_footer_desc', $role, 'Sistem Informasi Geospasial Terintegrasi Kabupaten Tanah Bumbu untuk transparansi data tata ruang dan investasi.');
+
 // Helper to clean paths that might have 'public/' prefix from database
 if (!function_exists('clean_asset_url')) {
     function clean_asset_url($path)
@@ -33,6 +40,25 @@ if (!function_exists('clean_asset_url')) {
         return base_url($path);
     }
 }
+
+// Consolidate data for partials
+$pageData = [
+    'appName' => $appName,
+    'logoNavbar1' => $logoNavbar1,
+    'logoNavbar2' => $logoNavbar2,
+    'appSlogan' => $appSlogan,
+    'fbUrl' => $fbUrl,
+    'igUrl' => $igUrl,
+    'ytUrl' => $ytUrl,
+    'twUrl' => $twUrl,
+    'footerText' => $footerText,
+    'contactEmail' => $contactEmail,
+    'contactPhone' => $contactPhone,
+    'agencyFooterDesc' => $agencyFooterDesc,
+    'mapIframe' => $mapIframe,
+    'copyrightText' => $copyrightText,
+    'role' => $role
+];
 ?>
 <html lang="id">
 
@@ -255,6 +281,9 @@ if (!function_exists('clean_asset_url')) {
             .app-name {
                 font-size: 1.05rem !important;
                 letter-spacing: -0.5px !important;
+                background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
             }
 
             .app-subtitle {
@@ -406,13 +435,13 @@ if (!function_exists('clean_asset_url')) {
         }
 
         body.is-map-page .navbar-container {
-            padding: 1rem 1.5rem 0.5rem 1.5rem;
+            padding: 1.5rem 2rem 0.5rem 2rem;
         }
 
         body.is-map-page .app-main-content {
             padding: 16px;
             gap: 0;
-            height: calc(100vh - 100px);
+            height: calc(100vh - 110px);
             /* Adjust based on navbar height */
             overflow: hidden;
         }
@@ -455,7 +484,6 @@ if (!function_exists('clean_asset_url')) {
             }
         }
     </style>
-    </style>
     <?= $this->renderSection('styles') ?>
 </head>
 
@@ -466,128 +494,15 @@ if (!function_exists('clean_asset_url')) {
     <div class="bg-blob blob-p"></div>
     <div class="bg-blob blob-a"></div>
 
-    <div class="navbar-container">
-        <nav class="navbar navbar-expand-lg">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="<?= base_url() ?>">
-                    <div class="brand-logos d-flex gap-1 gap-md-2 align-items-center">
-                        <?php if (isset($logoNavbar1) && $logoNavbar1): ?>
-                            <img src="<?= clean_asset_url($logoNavbar1) ?>" alt="Logo 1">
-                        <?php endif; ?>
-                        <?php if (isset($logoNavbar2) && $logoNavbar2): ?>
-                            <img src="<?= clean_asset_url($logoNavbar2) ?>" alt="Logo 2" class="d-none d-lg-block">
-                        <?php endif; ?>
-                    </div>
-                    <div class="d-flex flex-column">
-                        <span class="app-name">Geotagging DPMPTSP <span class="d-none d-lg-inline">TANAH
-                                BUMBU</span></span>
-                        <span class="app-subtitle">Sistem Informasi Geospasial Terintegrasi</span>
-                    </div>
-                </a>
-
-                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto align-items-center">
-                        <li class="nav-item">
-                            <a class="nav-link <?= (current_url() == base_url() || current_url() == base_url('/')) ? 'active' : '' ?>"
-                                href="<?= base_url() ?>">Beranda</a>
-                        </li>
-                        <li class="nav-item ms-lg-2">
-                            <a class="nav-link <?= (strpos(current_url(), '/map') !== false) ? 'active' : '' ?>"
-                                href="<?= base_url('map') ?>">Peta Interaktif</a>
-                        </li>
-                        <li class="nav-item ms-lg-4">
-                            <a class="nav-link btn-portal" href="<?= base_url('auth/login') ?>">
-                                <i class="bi bi-shield-lock-fill me-2"></i> Portal Petugas
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </div>
+    <!-- Layout Navbar Partial -->
+    <?= view('layouts/partials/navbar', $pageData) ?>
 
     <main class="flex-grow-1 app-main-content">
         <?= $this->renderSection('content') ?>
     </main>
 
-    <footer>
-        <div class="container">
-            <div class="row g-4 justify-content-between">
-                <div class="col-lg-4 col-md-6">
-                    <div class="footer-brand mb-4">
-                        <h4 class="fw-900 text-primary mb-1"><?= esc($appName) ?></h4>
-                        <p class="text-muted small"><?= esc($appSubtitle) ?></p>
-                    </div>
-                    <p class="text-muted mb-4 pe-lg-4">Sistem Informasi Geospasial Terintegrasi Kabupaten Tanah Bumbu
-                        untuk transparansi data tata ruang dan investasi.</p>
-
-                    <!-- Dynamic Social Media -->
-                    <?php if ($fbUrl || $igUrl || $ytUrl || $twUrl): ?>
-                        <div class="d-flex gap-3">
-                            <?php if ($fbUrl): ?><a href="<?= esc($fbUrl) ?>" target="_blank" class="social-btn"><i
-                                        class="bi bi-facebook"></i></a><?php endif; ?>
-                            <?php if ($igUrl): ?><a href="<?= esc($igUrl) ?>" target="_blank" class="social-btn"><i
-                                        class="bi bi-instagram"></i></a><?php endif; ?>
-                            <?php if ($ytUrl): ?><a href="<?= esc($ytUrl) ?>" target="_blank" class="social-btn"><i
-                                        class="bi bi-youtube"></i></a><?php endif; ?>
-                            <?php if ($twUrl): ?><a href="<?= esc($twUrl) ?>" target="_blank" class="social-btn"><i
-                                        class="bi bi-twitter-x"></i></a><?php endif; ?>
-                        </div>
-                    <?php endif; ?>
-                </div>
-
-                <div class="col-lg-2 col-md-6">
-                    <h5 class="footer-heading">Navigasi</h5>
-                    <ul class="footer-links">
-                        <li><a href="<?= base_url() ?>">Halaman Utama</a></li>
-                        <li><a href="<?= base_url('map') ?>">Peta Interaktif</a></li>
-                        <li><a href="<?= base_url('map?layer=rdtr') ?>">Layer RDTR</a></li>
-                        <li><a href="<?= base_url('map?layer=rtrw') ?>">Layer RTRW</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-lg-2 col-md-6">
-                    <h5 class="footer-heading">Kontak</h5>
-                    <ul class="footer-links">
-                        <li><a href="#"><i class="bi bi-geo-alt-fill me-2 text-primary"></i> <?= esc($footerText) ?></a>
-                        </li>
-                        <li><a href="mailto:info@tanahbumbu.go.id"><i class="bi bi-envelope-fill me-2 text-primary"></i>
-                                info@tanahbumbu.go.id</a></li>
-                        <li><a href="tel:#"><i class="bi bi-telephone-fill me-2 text-primary"></i> (0518) Hubungi
-                                Kami</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="footer-heading">Lokasi Kami</h5>
-                    <div class="map-frame">
-                        <?php if ($mapIframe): ?>
-                            <?= $mapIframe ?>
-                        <?php else: ?>
-                            <div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted bg-light">
-                                <small>Peta belum dikonfigurasi</small>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-
-            <div
-                class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start">
-                <p class="mb-3 mb-md-0">&copy; <?= date('Y') ?> Pemerintah Kabupaten Tanah Bumbu. Seluruh Hak Cipta
-                    Dilindungi.</p>
-                <div class="d-flex gap-4">
-                    <a href="#" class="text-decoration-none text-muted hover-primary">Kebijakan Privasi</a>
-                    <a href="#" class="text-decoration-none text-muted hover-primary">Syarat & Ketentuan</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!-- Layout Footer Partial -->
+    <?= view('layouts/partials/footer', $pageData) ?>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

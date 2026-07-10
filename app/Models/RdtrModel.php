@@ -13,9 +13,27 @@ class RdtrModel extends Model
     protected $useSoftDeletes = false;
     protected $protectFields = true;
     protected $allowedFields = [
-        'nama_zona', 'peruntukan', 'keterangan', 'regulation_text', 'color',
-        'kdb', 'klb', 'kdh', 'ktb', 'ketinggian_max', 'jumlah_lantai_max',
-        'gsb', 'gsl', 'sub_zona', 'arahan_pemanfaatan', 'kbli_allowed'
+        'nama_zona',
+        'peruntukan',
+        'keterangan',
+        'regulation_text',
+        'color',
+        'kdb',
+        'klb',
+        'kdh',
+        'ktb',
+        'ketinggian_max',
+        'jumlah_lantai_max',
+        'gsb',
+        'gsl',
+        'sub_zona',
+        'arahan_pemanfaatan',
+        'kbli_allowed',
+        'sumber_data',
+        'tanggal_berlaku',
+        'versi_data',
+        'keterangan_sumber',
+        'created_by'
     ];
 
     // Dates
@@ -35,7 +53,7 @@ class RdtrModel extends Model
                 WHERE ST_Intersects(geom, ST_SetSRID(ST_Point(?, ?), 4326)) 
                 LIMIT 1";
 
-        $query = $this->db->query($sql, [(float)$lng, (float)$lat]);
+        $query = $this->db->query($sql, [(float) $lng, (float) $lat]);
         $row = $query->getRowArray();
 
         if ($row) {
@@ -51,7 +69,7 @@ class RdtrModel extends Model
                 ORDER BY dist_deg ASC 
                 LIMIT 1";
 
-        $query = $this->db->query($sql, [(float)$lng, (float)$lat, (float)$lng, (float)$lat]);
+        $query = $this->db->query($sql, [(float) $lng, (float) $lat, (float) $lng, (float) $lat]);
         $row = $query->getRowArray();
 
         if ($row) {

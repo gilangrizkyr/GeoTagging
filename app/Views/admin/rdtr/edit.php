@@ -210,6 +210,71 @@ Edit Profil Zona:
                                 <input type="text" name="regulation_text" class="form-control fw-600"
                                     value="<?= esc($zone['regulation_text'] ?? '') ?>">
                             </div>
+
+                            <!-- KBLI Allowed Multi-select -->
+                            <div class="col-12 mt-2">
+                                <label class="form-label fw-700 small d-flex align-items-center gap-2">
+                                    <i class="bi bi-grid-3x3-gap-fill text-primary"></i>
+                                    Kegiatan KBLI yang Diizinkan
+                                    <span class="badge bg-primary-subtle text-primary fw-700"
+                                        style="font-size:0.65rem;">Standar 2025</span>
+                                    <span class="text-muted fw-500 small">(kosongkan = semua kegiatan boleh)</span>
+                                </label>
+                                <div id="kbli-tags-edit"
+                                    class="d-flex flex-wrap gap-2 p-3 border rounded-3 bg-light mb-2"
+                                    style="min-height:52px;">
+                                    <span class="text-muted small fw-500 fst-italic" id="kbli-empty-hint-edit">Belum ada
+                                        kode KBLI dipilih</span>
+                                </div>
+                                <input type="hidden" name="kbli_allowed" id="kbli-hidden-edit"
+                                    value="<?= esc($zone['kbli_allowed'] ?? '') ?>">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i
+                                            class="bi bi-search text-muted"></i></span>
+                                    <input type="text" id="kbli-search-edit" class="form-control fw-600"
+                                        placeholder="Cari kode atau nama kegiatan (cth: apotek, 86201)...">
+                                    <button type="button" class="btn btn-outline-secondary" id="kbli-clear-edit">
+                                        <i class="bi bi-x-circle"></i>
+                                    </button>
+                                </div>
+                                <div id="kbli-results-edit" class="border rounded-3 mt-1 bg-white shadow-sm d-none"
+                                    style="max-height:220px;overflow-y:auto;position:relative;z-index:10;"></div>
+                                <div class="mt-1 small text-muted fw-500">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Hanya kegiatan yang dipilih yang akan divalidasi saat analisis zonasi.
+                                </div>
+                            </div>
+
+                            <!-- Section: Data Provenance -->
+                            <div class="col-12 mt-4 pt-4 border-top">
+                                <div class="form-section-title mb-3" style="font-size: 0.9rem;">
+                                    <i class="bi bi-shield-check text-primary"></i> Sumber & Legalitas Data
+                                </div>
+                                <div class="row g-3 p-3 bg-light rounded-4 border">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-700 small">Sumber Instansi Data <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" name="sumber_data" class="form-control fw-600"
+                                            value="<?= esc($zone['sumber_data'] ?? '') ?>"
+                                            placeholder="Contoh: Dinas PUPR / Bappeda" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label fw-700 small">Tanggal Berlaku</label>
+                                        <input type="date" name="tanggal_berlaku" class="form-control fw-600"
+                                            value="<?= esc($zone['tanggal_berlaku'] ?? '') ?>">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label fw-700 small">Versi Data</label>
+                                        <input type="text" name="versi_data" class="form-control fw-600"
+                                            value="<?= esc($zone['versi_data'] ?? '') ?>" placeholder="v1.0">
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <label class="form-label fw-700 small">Keterangan Sumber / Dasar Hukum</label>
+                                        <textarea name="keterangan_sumber" class="form-control fw-500 small" rows="2"
+                                            placeholder="Keterangan tambahan mengenai asal usul data..."><?= esc($zone['keterangan_sumber'] ?? '') ?></textarea>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="mt-5 d-flex justify-content-end">

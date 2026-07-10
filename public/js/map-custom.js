@@ -117,6 +117,21 @@ $(document).ready(function () {
         }
     });
 
+    $.get(getApiUrl('/json/boundary.geojson'), function (res) {
+        L.geoJSON(res, {
+            // style: {
+            //     color: '#6366f1',
+            // }
+            style : {
+                color: '#3665be',
+                weight: 2,
+                dashArray: '6, 6',
+                fillOpacity: 0,
+                interactive: false
+            }
+        }).addTo(map);
+    });
+
     let marker, accuCircle;
     map.on('click', function (e) { checkPoint(e.latlng.lat, e.latlng.lng); });
     $('#btn-search-coord').click(function () {
@@ -127,16 +142,30 @@ $(document).ready(function () {
     function checkPoint(lat, lng, forced) {
         if (marker) map.removeLayer(marker);
         marker = L.marker([lat, lng]).addTo(map);
-        map.flyTo([lat, lng], 16, { animate: true, duration: 1.5 });
-        $('#input-lat').val(lat.toFixed(6)); $('#input-lng').val(lng.toFixed(6));
 
         const displayMode = window.innerWidth >= 992 ? 'flex' : 'block';
-        $('.floating-panel').css('display', displayMode).hide().fadeIn(500, function () {
+
+        // Show panel immediately (opacity 0) to trigger layout change, then invalidate map size
+        const panel = $('.floating-panel');
+        const isNewPanel = panel.css('display') === 'none';
+
+        if (isNewPanel) {
+            panel.css({ display: displayMode, opacity: 0 }).animate({ opacity: 1 }, 500);
             if (typeof map !== 'undefined') map.invalidateSize();
-            if (window.innerWidth < 992) {
-                $('html, body').animate({ scrollTop: $(".floating-panel").offset().top - 20 }, 800);
-            }
+        }
+
+        // Smoother flyTo animation
+        map.flyTo([lat, lng], 15, {
+            animate: true,
+            duration: 1.8,
+            easeLinearity: 0.25
         });
+
+        $('#input-lat').val(lat.toFixed(6)); $('#input-lng').val(lng.toFixed(6));
+
+        if (window.innerWidth < 992) {
+            $('html, body').animate({ scrollTop: $(".floating-panel").offset().top - 20 }, 800);
+        }
 
         // Perform Spatial Analysis API Call
         $.post(getApiUrl('/api/spatial/check'), { lat: lat, lng: lng }, function (res) {

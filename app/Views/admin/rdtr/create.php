@@ -191,7 +191,52 @@ Konfigurasi Zona RDTR Baru
                                 <input type="text" name="regulation_text" class="form-control fw-600"
                                     placeholder="Contoh: Perda No 01 Tahun 2024 Tentang RTRW">
                             </div>
-                        </div>
+
+                            <!-- KBLI Allowed Multi-select -->
+                            <div class="col-12 mt-2" id="kbli-selector-section">
+                                <label class="form-label fw-700 small d-flex align-items-center gap-2">
+                                    <i class="bi bi-grid-3x3-gap-fill text-primary"></i>
+                                    Kegiatan KBLI yang Diizinkan
+                                    <span class="badge bg-primary-subtle text-primary fw-700"
+                                        style="font-size: 0.65rem;">Standar 2025</span>
+                                    <span class="text-muted fw-500 small">(kosongkan = semua kegiatan boleh)</span>
+                                </label>
+
+                                <!-- Tag display area -->
+                                <div id="kbli-tags-create"
+                                    class="d-flex flex-wrap gap-2 p-3 border rounded-3 bg-light mb-2"
+                                    style="min-height: 52px;">
+                                    <span class="text-muted small fw-500 fst-italic" id="kbli-empty-hint-create">Belum
+                                        ada kode KBLI dipilih — klik "Tambah KBLI" atau ketik untuk mencari</span>
+                                </div>
+
+                                <!-- Hidden input carries comma-separated codes -->
+                                <input type="hidden" name="kbli_allowed" id="kbli-hidden-create" value="">
+
+                                <!-- Search input -->
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i
+                                            class="bi bi-search text-muted"></i></span>
+                                    <input type="text" id="kbli-search-create" class="form-control fw-600"
+                                        placeholder="Cari kode atau nama kegiatan (cth: apotek, 86201, restoran)...">
+                                    <button type="button" class="btn btn-outline-secondary" id="kbli-clear-create">
+                                        <i class="bi bi-x-circle"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Results dropdown -->
+                                <div id="kbli-results-create" class="border rounded-3 mt-1 bg-white shadow-sm d-none"
+                                    style="max-height: 220px; overflow-y: auto; position: relative; z-index: 10;">
+                                </div>
+
+                                <div class="mt-1 small text-muted fw-500">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Pilih satu atau lebih kode KBLI. Hanya kegiatan yang dipilih yang akan divalidasi
+                                    saat analisis zonasi.
+                                </div>
+                            </div>
+
+                        </div><!-- end row -->
 
                         <div class="mt-5 d-flex justify-content-end">
                             <button type="button" class="btn btn-primary px-5 py-2 fw-700 rounded-3 shadow-sm"
@@ -428,5 +473,97 @@ Konfigurasi Zona RDTR Baru
 
     // Initial required state
     document.getElementById('gj-file').required = true;
+
+    // ============================================================
+    // KBLI 2025 Autocomplete Engine — create form
+    // ============================================================
+    (function kbliSelector(suffix) {
+        const searchEl = document.getElementById('kbli-search-' + suffix);
+        const resultsEl = document.getElementById('kbli-results-' + suffix);
+        const tagsEl = document.getElementById('kbli-tags-' + suffix);
+        const hiddenEl = document.getElementById('kbli-hidden-' + suffix);
+        const hintEl = document.getElementById('kbli-empty-hint-' + suffix);
+        const clearBtn = document.getElementById('kbli-clear-' + suffix);
+
+        if (!searchEl) return;
+
+        let kbliData = {};
+        let selected = {}; // {code: name}
+
+        // Load JSON once
+        fetch('<?= base_url('json/kbli2025.json') ?>')
+            .then(r => r.json())
+            .then(j => { kbliData = j.data || {}; })
+            .catch(() => console.warn('KBLI JSON load failed'));
+
+        function updateHidden() {
+            hiddenEl.value = Object.keys(selected).join(',');
+        }
+
+        function renderTags() {
+            tagsEl.innerHTML = '';
+            const codes = Object.keys(selected);
+            if (codes.length === 0) {
+                tagsEl.appendChild(hintEl);
+                return;
+            }
+            codes.forEach(code => {
+                const tag = document.createElement('span');
+                tag.className = 'badge d-flex align-items-center gap-1 fw-700 px-3 py-2';
+                tag.style.cssText = 'background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;font-size:0.75rem;border-radius:8px;';
+                tag.innerHTML = `<span>${code}</span><span class="text-muted fw-500" style="font-size:0.65rem;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${selected[code]}</span><button type="button" class="btn-close ms-1" style="font-size:0.5rem;" data-code="${code}"></button>`;
+                tag.querySelector('.btn-close').addEventListener('click', () => {
+                    delete selected[code];
+                    renderTags();
+                    updateHidden();
+                });
+                tagsEl.appendChild(tag);
+            });
+        }
+
+        function renderResults(keyword) {
+            keyword = keyword.trim().toLowerCase();
+            resultsEl.innerHTML = '';
+            if (!keyword) { resultsEl.classList.add('d-none'); return; }
+
+            const matches = Object.entries(kbliData).filter(([code, name]) =>
+                code.startsWith(keyword) || name.toLowerCase().includes(keyword)
+            ).slice(0, 25);
+
+            if (matches.length === 0) {
+                resultsEl.innerHTML = '<div class="p-3 text-muted small fw-600">Tidak ada hasil untuk "' + keyword + '"</div>';
+                resultsEl.classList.remove('d-none');
+                return;
+            }
+
+            matches.forEach(([code, name]) => {
+                const item = document.createElement('div');
+                const isSelected = !!selected[code];
+                item.className = 'px-3 py-2 d-flex gap-2 align-items-center small fw-600 ' + (isSelected ? 'bg-primary-subtle' : 'hover-bg');
+                item.style.cursor = 'pointer';
+                item.innerHTML = `<span class="badge bg-primary-subtle text-primary fw-800 me-1" style="min-width:54px;font-size:0.7rem;">${code}</span><span class="text-dark">${name}</span>${isSelected ? '<i class="bi bi-check-circle-fill text-primary ms-auto"></i>' : ''}`;
+                item.addEventListener('click', () => {
+                    if (isSelected) { delete selected[code]; }
+                    else { selected[code] = name; }
+                    renderTags();
+                    updateHidden();
+                    renderResults(searchEl.value);
+                });
+                resultsEl.appendChild(item);
+            });
+
+            resultsEl.classList.remove('d-none');
+        }
+
+        searchEl.addEventListener('input', () => renderResults(searchEl.value));
+        searchEl.addEventListener('focus', () => { if (searchEl.value) renderResults(searchEl.value); });
+        document.addEventListener('click', e => {
+            if (!resultsEl.contains(e.target) && e.target !== searchEl) resultsEl.classList.add('d-none');
+        });
+        clearBtn.addEventListener('click', () => {
+            searchEl.value = '';
+            resultsEl.classList.add('d-none');
+        });
+    })('create');
 </script>
 <?php $this->endSection() ?>

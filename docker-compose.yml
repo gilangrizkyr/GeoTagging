@@ -12,7 +12,7 @@ services:
       - app_writable:/var/www/html/writable
       - app_uploads:/var/www/html/public/uploads
     ports:
-      - "9008:80"
+      - "9009:80"
     env_file:
       - .env
     # networks:

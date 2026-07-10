@@ -129,13 +129,13 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'Pusat Da
                 </h5>
             </div>
             <div class="modal-body p-4">
-                <p class="fw-700 text-dark">Informasi ini bersifat indikatif dan bukan merupakan rujukan legal formal.
+                <p class="fw-700 text-dark">Informasi Ini Bersifat Indikatif dan Bukan Merupakan Rujukan Legal Formal.
                 </p>
                 <div class="p-3 bg-light rounded-4 mb-4" style="font-size: 0.85rem; border: 1px solid #e2e8f0;">
                     <ul class="mb-0 text-muted fw-500">
-                        <li class="mb-2">Data mengacu pada ketersediaan spasial terbaru.</li>
-                        <li class="mb-2">Bukan rujukan resmi untuk KKPR/Izin Lokasi tetap.</li>
-                        <li>Verifikasi resmi silakan hubungi kantor DPMPTSP setempat.</li>
+                        <li class="mb-2">Data Mengacu Pada Ketersediaan Spasial Terbaru</li>
+                        <li class="mb-2">Bukan Rujukan Resmi Untuk KPPR/Izin Lokasi Tetap</li>
+                        <li class="mb-2">Verifikasi Resmi Silahkan Hubungi Kantor DPMPTSP Tanah Bumbu</li>
                     </ul>
                 </div>
                 <div class="form-check form-switch p-0 d-flex align-items-center gap-3">
@@ -276,7 +276,11 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'Pusat Da
         <div class="modal-content border-0 shadow-lg" style="border-radius: 24px; overflow: hidden;">
             <div class="modal-header border-0 p-4"
                 style="background: linear-gradient(135deg, #2a5298, #1e3c72); color: white;">
-                <h5 class="modal-title fw-800"><i class="bi bi-search me-2"></i> CARI KODE KBLI 2020</h5>
+                <h5 class="modal-title fw-800"><i class="bi bi-search me-2"></i> CARI KODE KBLI 
+                <!-- <span
+                        class="badge bg-white text-primary ms-2"
+                        style="font-size: 0.6rem; vertical-align: middle;">Standar 2025</span> -->
+                    </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4">
@@ -307,47 +311,12 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'Pusat Da
         appName: '<?= esc($appName) ?>'
     };
 
-    // KBLI Data for Lookup
-    const KBLI_DATA = {
-        "47111": "Toko Kelontong / Perdagangan Eceran Berbagai Macam Barang",
-        "47112": "Minimarket",
-        "47113": "Supermarket",
-        "47711": "Perdagangan Eceran Pakaian",
-        "47411": "Perdagangan Eceran Alat Komunikasi & Elektronik",
-        "47721": "Apotek / Perdagangan Eceran Barang Farmasi",
-        "56101": "Restoran / Rumah Makan",
-        "56301": "Kafe / Kedai Kopi",
-        "56102": "Warung Makan (Skala Mikro/Kecil)",
-        "96021": "Salon Kecantikan & Perawatan Tubuh",
-        "45401": "Bengkel Motor & Reparasi Kendaraan Bermotor",
-        "96011": "Laundry / Jasa Pencucian Kebutuhan Rumah Tangga",
-        "82191": "Fotokopi, Penyiapan Dokumen & Jasa Khusus Kantor Lainnya",
-        "84111": "Administrasi Pemerintahan Umum & Pelayanan Publik",
-        "68100": "Real Estat Yang Dimiliki Sendiri Atau Disewa (Kantor/Ruko)",
-        "64191": "Perbankan / Bank Umum",
-        "65111": "Asuransi Jiwa",
-        "10611": "Industri Penggilingan Padi & Penyosopan Beras",
-        "11011": "Industri Minuman / Pengolahan Minuman Beralkohol/Bukan",
-        "31001": "Industri Furnitur Dari Kayu",
-        "14101": "Industri Pakaian Jadi (Konveksi) Dari Tekstil",
-        "85101": "Pendidikan Taman Kanak-Kanak / PAUD",
-        "85102": "Pendidikan Dasar (SD/MI)",
-        "85311": "Pendidikan Menengah Pertama (SMP/MTs)",
-        "85321": "Pendidikan Menengah Atas/Kejuruan (SMA/SMK)",
-        "85491": "Bimbingan Belajar & Pelatihan Swasta",
-        "86101": "Aktivitas Rumah Sakit Pemerintah/Swasta",
-        "86102": "Aktivitas Puskesmas",
-        "86201": "Praktik Dokter Umum",
-        "86202": "Praktik Dokter Spesialis",
-        "41001": "Konstruksi Gedung Hunian (Rumah Tinggal)",
-        "41002": "Konstruksi Gedung Hunian (Apartemen/Rumah Susun)",
-        "55101": "Hotel Bintang & Akomodasi Sejenisnya",
-        "55103": "Penginapan Remaja (Hostel) & Pondok Wisata",
-        "94911": "Organisasi Peribadatan Islam (Masjid/Musholla)",
-        "94912": "Organisasi Peribadatan Kristen (Gereja)",
-        "94913": "Organisasi Peribadatan Hindu (Pura)",
-        "94914": "Organisasi Peribadatan Buddha (Vihara)"
-    };
+    // KBLI 2025 — Load from official local JSON (BPS)
+    let KBLI_DATA = {};
+    fetch('<?= base_url('json/kbli2025.json') ?>')
+        .then(res => res.json())
+        .then(json => { KBLI_DATA = json.data || {}; })
+        .catch(() => { console.warn('KBLI JSON gagal dimuat.'); });
 </script>
 <script src="<?= base_url('js/map-custom.js') ?>"></script>
 <?php $this->endSection() ?>

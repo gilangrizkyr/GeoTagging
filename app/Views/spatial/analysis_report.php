@@ -5,38 +5,34 @@
     <meta charset="utf-8">
     <title>Laporan Analisis Spasial - DPMPTSP Tanah Bumbu</title>
     <style>
-        /* A4 Page Setup - Hiding Browser Headers/Footers */
+        /* A4 Page Setup */
         @page {
             size: A4;
             margin: 0;
-            /* Clear browser-added headers */
         }
 
         body {
             font-family: 'Helvetica', 'Arial', sans-serif;
             color: #1a1a1a;
-            line-height: 1.5;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
             background: #fff;
             -webkit-print-color-adjust: exact;
         }
 
-        /* Master Table for Consistent Multi-Page Margins */
         #report-master {
             width: 100%;
         }
 
-        /* Top and Bottom Margins (Repeated on all pages) */
         .page-header-space {
-            height: 2.5cm;
+            height: 2.0cm;
         }
 
         .page-footer-space {
-            height: 2.5cm;
+            height: 2.0cm;
         }
 
-        /* Content Container with Side Margins */
         .page-body {
             padding-left: 2.5cm;
             padding-right: 2.5cm;
@@ -49,7 +45,8 @@
             width: 100%;
             border-bottom: 3px double #000;
             padding-bottom: 12px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            margin-top: 20px;
         }
 
         .logo-container {
@@ -71,21 +68,21 @@
         }
 
         .instansi-utama {
-            font-size: 16pt;
+            font-size: 14pt;
             font-weight: bold;
             margin: 0;
             text-transform: uppercase;
         }
 
         .nama-dinas {
-            font-size: 13pt;
+            font-size: 12pt;
             font-weight: bold;
             margin: 2px 0;
             text-transform: uppercase;
         }
 
         .alamat-dinas {
-            font-size: 8.5pt;
+            font-size: 8pt;
             margin: 2px 0;
             color: #333;
         }
@@ -93,36 +90,33 @@
         /* Titles and Content */
         .doc-title {
             text-align: center;
-            margin: 20px 0 30px 0;
+            margin: 15px 0 25px 0;
         }
 
         .doc-title h3 {
             text-decoration: underline;
-            margin-bottom: 5px;
-            font-size: 13pt;
+            margin-bottom: 3px;
+            font-size: 12pt;
             text-transform: uppercase;
         }
 
         .doc-num {
             font-size: 9pt;
-            color: #555;
-        }
-
-        .content-body {
-            text-align: justify;
+            color: #000;
+            font-weight: bold;
         }
 
         .section {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             page-break-inside: avoid;
         }
 
         .section-header {
             font-weight: bold;
             font-size: 10.5pt;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 4px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 3px;
             text-transform: uppercase;
         }
 
@@ -130,60 +124,61 @@
         table.data-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         table.data-table th,
         table.data-table td {
-            border: 1px solid #333;
-            padding: 10px 12px;
-            font-size: 10pt;
+            border: 1px solid #ccc;
+            padding: 8px 10px;
+            font-size: 9.5pt;
             vertical-align: top;
         }
 
         table.data-table th {
-            background-color: #f5f5f5;
+            background-color: #f8f9fa;
             text-align: left;
             width: 35%;
             font-weight: bold;
+            color: #444;
         }
 
-        .zebra tr:nth-child(even) {
-            background-color: #fcfcfc;
-        }
-
-        /* Badges & Misc */
         .badge {
             display: inline-block;
-            padding: 4px 10px;
+            padding: 2px 8px;
             border-radius: 3px;
             font-weight: bold;
-            font-size: 9pt;
-            border: 1px solid #ccc;
+            font-size: 8pt;
+            text-transform: uppercase;
         }
 
-        .badge-exact {
-            background: #e6fffa;
-            color: #234e52;
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
         }
 
-        .badge-proximity {
-            background: #fffaf0;
-            color: #744210;
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
         }
 
         .disclaimer {
-            font-size: 8.5pt;
+            font-size: 8pt;
             line-height: 1.4;
-            background: #fdfdfd;
-            border: 1px dashed #bbb;
-            padding: 15px;
-            margin-top: 30px;
+            background: #f9fafb;
+            border: 1px dashed #d1d5db;
+            padding: 12px;
+            margin-top: 20px;
             text-align: justify;
         }
 
         .signature-area {
-            margin-top: 40px;
+            margin-top: 30px;
         }
 
         .signature-table {
@@ -194,33 +189,37 @@
         .signature-table td {
             border: none;
             padding: 0;
-            vertical-align: bottom;
+            vertical-align: top;
         }
 
-        .qr-placeholder {
-            width: 90px;
-            height: 90px;
-            border: 1px solid #ccc;
-            background: #fff;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 8pt;
+        .qr-box {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #000;
+            display: block;
+            margin: 0 auto 5px auto;
+            position: relative;
+        }
+
+        .qr-box::after {
+            content: "QR CODE";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 7pt;
             color: #999;
+        }
+
+        .signature-box {
+            text-align: center;
+            width: 250px;
         }
 
         .meta-info {
             font-size: 8pt;
             color: #666;
-        }
-
-        .text-bold {
-            font-weight: bold;
-        }
-
-        .text-center {
-            text-align: center;
+            margin-top: 40px;
         }
 
         @media print {
@@ -247,38 +246,31 @@
                         <!-- Kop Surat -->
                         <div class="kop-surat">
                             <div class="logo-container">
-                                <?php if ($app_logo): ?>
-                                    <img src="<?= base_url($app_logo) ?>" alt="Logo Kab">
-                                <?php else: ?>
-                                    <img src="<?= base_url('uploads/1772710068_31b8212d39fbe1b325c6.png') ?>"
-                                        alt="Logo Kab">
-                                <?php endif; ?>
+                                <img src="<?= base_url($app_logo ?: 'uploads/logo-default.png') ?>" alt="Logo">
                             </div>
                             <div class="text-container">
-                                <p class="instansi-utama">PEMERINTAH KABUPATEN TANAH BUMBU</p>
-                                <p class="nama-dinas">DINAS PENANAMAN MODAL DAN PELAYANAN TERPADU SATU PINTU</p>
-                                <p class="alamat-dinas">Jl. Dharma Praja No. 1, Kel. Gunung Tinggi, Kec. Batulicin, Kab.
-                                    Tanah Bumbu</p>
-                                <p class="alamat-dinas">Email: dpmptsp@tanahbumbukab.go.id | Website:
-                                    dpmptsp.tanahbumbukab.go.id</p>
+                                <p class="instansi-utama"><?= esc($agency_main_name) ?></p>
+                                <p class="nama-dinas"><?= esc($agency_sub_name) ?></p>
+                                <p class="alamat-dinas"><?= esc($agency_address) ?></p>
+                                <p class="alamat-dinas"><?= esc($agency_contact) ?></p>
                             </div>
                         </div>
 
                         <!-- Judul Dokumen -->
                         <div class="doc-title">
                             <h3>LAPORAN INFORMASI TATA RUANG (INDIKATIF)</h3>
-                            <p class="doc-num">Nomor: <?= date('Y/m/d') ?>/GEO/<?= strtoupper(substr(uniqid(), -4)) ?>
-                            </p>
+                            <p class="doc-num">Nomor: <?= $report_no ?></p>
                         </div>
 
                         <div class="content-body">
-                            <p>Berdasarkan hasil analisis sistem informasi geospasial *GeoTagging* pada lokasi yang
-                                diajukan, berikut adalah rincian informasi pemanfaatan ruang:</p>
+                            <p>Berdasarkan hasil analisis sistem informasi geospasial <strong>GeoTagging
+                                    DPMPTSP</strong> pada lokasi koordinat yang diajukan, berikut adalah rincian
+                                informasi pemanfaatan ruang selengkapnya:</p>
 
-                            <!-- Seksi 1 -->
+                            <!-- 1. Identifikasi Lokasi -->
                             <div class="section">
-                                <div class="section-header">1. Identifikasi Lokasi</div>
-                                <table class="data-table zebra">
+                                <div class="section-header">1. Identifikasi Geografis Lokasi</div>
+                                <table class="data-table">
                                     <tr>
                                         <th>Garis Lintang (Latitude)</th>
                                         <td><?= esc($lat) ?></td>
@@ -288,115 +280,89 @@
                                         <td><?= esc($lng) ?></td>
                                     </tr>
                                     <tr>
-                                        <th>Metode Pencocokan</th>
+                                        <th>Status Akurasi Data</th>
                                         <td>
                                             <?php if ($match_type === 'exact'): ?>
-                                                <span class="badge badge-exact">DATA AKURAT (Interseksi Geometri)</span>
+                                                <span class="badge badge-success">Data Akurat (Interseksi Geometri)</span>
                                             <?php else: ?>
-                                                <span class="badge badge-proximity">DATA INDIKATIF (Radius Kedekatan
-                                                    100m)</span>
+                                                <span class="badge badge-warning">Data Indikatif (Radius Kedekatan)</span>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
 
-                            <!-- Seksi 2: RDTR (Jika Ada) -->
+                            <!-- 2. RDTR Section -->
                             <?php if ($rdtr): ?>
                                 <div class="section">
-                                    <div class="section-header">2. Rencana Detail Tata Ruang (RDTR)</div>
-                                    <table class="data-table zebra">
+                                    <div class="section-header">2. Informasi Rencana Detail Tata Ruang (RDTR)</div>
+                                    <table class="data-table">
                                         <tr>
                                             <th>Nama Zona / Sub-Zona</th>
-                                            <td class="text-bold"><?= esc($rdtr['nama_zona']) ?> /
-                                                <?= esc($rdtr['sub_zona'] ?? '-') ?>
+                                            <td style="font-weight: bold;"><?= esc($rdtr['nama_zona']) ?> /
+                                                <?= esc($rdtr['sub_zona'] ?: '-') ?>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>Peruntukan Ruang</th>
+                                            <th>Peruntukan Ruang Utama</th>
                                             <td><?= esc($rdtr['peruntukan']) ?></td>
                                         </tr>
                                         <tr>
-                                            <th>Dasar Hukum</th>
-                                            <td><?= esc($rdtr['regulation_text'] ?? 'Peraturan Daerah tentang Rencana Detail Tata Ruang Wilayah Kabupaten Tanah Bumbu.') ?>
+                                            <th>Dasar Hukum / Regulasi</th>
+                                            <td style="font-size: 8.5pt; font-style: italic;">
+                                                <?= esc($rdtr['regulation_text'] ?: 'Peraturan Daerah tentang RDTR Kabupaten Tanah Bumbu') ?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Legalitas / Sumber Data</th>
+                                            <td style="font-size: 8.5pt;">
+                                                Instansi:
+                                                <strong><?= esc($rdtr['sumber_data'] ?: 'Dinas PUPR / DPMPTSP') ?></strong><br>
+                                                Versi Data: <?= esc($rdtr['versi_data'] ?: 'v1.0') ?> (Berlaku s/d:
+                                                <?= $rdtr['tanggal_berlaku'] ? date('d/m/Y', strtotime($rdtr['tanggal_berlaku'])) : 'Permanen' ?>)
                                             </td>
                                         </tr>
                                     </table>
-                                </div>
 
-                                <!-- Seksi 3: ITBX (Jika RDTR Ada) -->
-                                <div class="section">
-                                    <div class="section-header">3. Ketentuan Intensitas Pemanfaatan Ruang (ITBX)</div>
+                                    <!-- 3. ITBX Details -->
+                                    <div class="section-header">3. Ketentuan Intensitas Bangunan (ITBX)</div>
                                     <table class="data-table">
                                         <tr>
-                                            <th>Koefisien Dasar Bangunan (KDB)</th>
-                                            <td>Maksimal <?= esc($rdtr['itbx']['kdb'] ?? '-') ?>%</td>
+                                            <th>KDB (Dasar Bangunan)</th>
+                                            <td>Maks. <?= esc($rdtr['itbx']['kdb'] ?: '-') ?>%</td>
+                                            <th>KLB (Lantai Bangunan)</th>
+                                            <td>Maks. <?= esc($rdtr['itbx']['klb'] ?: '-') ?></td>
                                         </tr>
                                         <tr>
-                                            <th>Koefisien Lantai Bangunan (KLB)</th>
-                                            <td>Maksimal <?= esc($rdtr['itbx']['klb'] ?? '-') ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Garis Sempadan Bangunan (GSB)</th>
-                                            <td>Minimal <?= esc($rdtr['itbx']['gsb'] ?? '-') ?> Meter</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Garis Sempadan Lahan (GSL)</th>
-                                            <td>Minimal <?= esc($rdtr['itbx']['gsl'] ?? '-') ?> Meter</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Koefisien Dasar Hijau (KDH)</th>
-                                            <td>Minimal <?= esc($rdtr['itbx']['kdh'] ?? '-') ?>%</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Ketinggian Bangunan</th>
-                                            <td>Maksimal <?= esc($rdtr['itbx']['ketinggian_max'] ?? '-') ?> Meter</td>
+                                            <th>GSB (Sempadan Bangunan)</th>
+                                            <td>Min. <?= esc($rdtr['itbx']['gsb'] ?: '-') ?> Meter</td>
+                                            <th>KDH (Dasar Hijau)</th>
+                                            <td>Min. <?= esc($rdtr['itbx']['kdh'] ?: '-') ?>%</td>
                                         </tr>
                                     </table>
                                 </div>
                             <?php endif; ?>
 
-                            <!-- Seksi Tambahan: RTRW -->
-                            <?php if ($rtrw): ?>
+                            <!-- 4. KBLI Analysis -->
+                            <?php if (isset($kbli_validation)): ?>
                                 <div class="section">
-                                    <div class="section-header"><?= ($rdtr ? '4' : '2') ?>. Rencana Tata Ruang Wilayah
-                                        (RTRW)</div>
-                                    <table class="data-table zebra">
+                                    <div class="section-header">4. Analisis Kesesuaian Kegiatan Bisnis (KBLI 2025)</div>
+                                    <table class="data-table">
                                         <tr>
-                                            <th>Nama Kawasan</th>
-                                            <td class="text-bold"><?= esc($rtrw['nama_kawasan']) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Fungsi Utama Kawasan</th>
-                                            <td><?= esc($rtrw['fungsi_kawasan']) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Dasar Hukum</th>
-                                            <td>Peraturan Daerah Kabupaten Tanah Bumbu tentang Rencana Tata Ruang Wilayah.
+                                            <th>Kode & Nama Kegiatan</th>
+                                            <td><strong><?= esc($kbli_validation['code']) ?></strong> -
+                                                <?= esc($kbli_validation['name']) ?>
                                             </td>
                                         </tr>
-                                    </table>
-                                </div>
-                            <?php endif; ?>
-
-                            <?php if (isset($kbli_validation)): ?>
-                                <!-- Seksi KBLI -->
-                                <div class="section">
-                                    <div class="section-header"><?= ($rdtr ? ($rtrw ? '5' : '4') : ($rtrw ? '3' : '2')) ?>.
-                                        Analisis Kesesuaian Kegiatan Bisnis (KBLI)</div>
-                                    <table class="data-table zebra">
                                         <tr>
-                                            <th>Kode KBLI</th>
-                                            <td><?= esc($kbli_validation['code']) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Jenis Kegiatan</th>
-                                            <td><?= esc($kbli_validation['name']) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Hasil Analisis Sistem</th>
-                                            <td class="text-bold">
-                                                <?= $kbli_validation['allowed'] ? '<span style="color: green;">SESUAI / DIIZINKAN</span>' : '<span style="color: red;">TIDAK SESUAI / DILARANG</span>' ?>
+                                            <th>Hasil Validasi Sistem</th>
+                                            <td style="font-weight: bold;">
+                                                <?php if ($kbli_validation['allowed']): ?>
+                                                    <span style="color: #059669;">✔ SESUAI / DIIZINKAN PADA ZONA INI</span>
+                                                <?php else: ?>
+                                                    <span style="color: #dc2626;">✖ TIDAK SESUAI / TIDAK DIIZINKAN PADA ZONA
+                                                        INI</span>
+                                                <?php endif; ?>
                                             </td>
                                         </tr>
                                     </table>
@@ -405,28 +371,38 @@
 
                             <!-- Disclaimer -->
                             <div class="disclaimer">
-                                <span class="text-bold">CATATAN PENTING:</span><br>
-                                Laporan ini dihasilkan secara otomatis oleh sistem GeoTagging DPMPTSP Tanah Bumbu.
-                                Laporan ini bersifat <span class="text-bold">INDIKATIF</span> dan hanya bertujuan
-                                sebagai informasi awal bagi pemohon. Dokumen ini <span class="text-bold">BUKAN</span>
-                                merupakan izin final, bukan dokumen KKPR, dan tidak memiliki kekuatan hukum dasar
-                                konstruksi. Validasi resmi wajib melalui sistem OSS-RBA.
+                                <strong>DISCLAIMER / PERNYATAAN:</strong><br>
+                                <?= nl2br(esc($pdf_disclaimer)) ?>
                             </div>
 
                             <!-- Signature Area -->
                             <div class="signature-area">
                                 <table class="signature-table">
                                     <tr>
-                                        <td>
+                                        <td style="width: 50%;">
                                             <div class="meta-info">
                                                 Dicetak pada: <?= date('d/m/Y H:i:s') ?><br>
-                                                ID: <?= strtoupper(uniqid('GEO-TANBU-')) ?><br>
-                                                Dokumen sah dihasilkan secara sistemik.
+                                                Report ID: <?= strtoupper(uniqid('TANBU-')) ?><br>
+                                                Sistem Terverifikasi DPMPTSP Tanah Bumbu
                                             </div>
                                         </td>
-                                        <td style="width: 120px; text-align: center;">
-                                            <div class="qr-placeholder">QR VERIFIKASI</div>
-                                            <div class="meta-info text-bold">SISTEM TERVALIDASI</div>
+                                        <td>
+                                            <div class="signature-box" style="float: right;">
+                                                <p style="margin-bottom: 50px;">
+                                                    <?= esc($pejabat['lokasi']) ?>, <?= date('d F Y') ?><br>
+                                                    <strong><?= esc($pejabat['jabatan']) ?></strong>
+                                                </p>
+                                                <?php if ($show_qr): ?>
+                                                    <div class="qr-box">
+                                                        <img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=<?= urlencode(base_url('api/spatial/export-analysis?lat=' . $lat . '&lng=' . $lng . '&kbli=' . ($kbli_validation['code'] ?? ''))) ?>&choe=UTF-8"
+                                                            alt="QR Verify">
+                                                    </div>
+                                                <?php endif; ?>
+                                                <p>
+                                                    <strong><u><?= esc($pejabat['nama']) ?></u></strong><br>
+                                                    NIP. <?= esc($pejabat['nip']) ?>
+                                                </p>
+                                            </div>
                                         </td>
                                     </tr>
                                 </table>

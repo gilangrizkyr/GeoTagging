@@ -56,6 +56,7 @@ class Home extends BaseController
             'avgSearchesPerDay' => $avgSearchesPerDay,
             'heroImages' => $heroImages,
             'heroSlideInterval' => (int) $heroSlideInterval * 1000, // Convert to ms
+            'settingsModel' => $settingsModel,
         ];
 
         return view('home/index', $data);

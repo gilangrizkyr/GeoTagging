@@ -333,7 +333,7 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'SISTEM S
         <div class="sidebar-header">
             <div class="d-flex flex-column align-items-center gap-2 text-center">
                 <?php if ($logoSidebar): ?>
-                    <img src="<?= base_url($logoSidebar) ?>" alt="Logo" style="height: 50px; width: auto;">
+                    <img src="<?= get_media_url($logoSidebar) ?>" alt="Logo" style="height: 50px; width: auto;">
                     <?php
                 else: ?>
                     <div class="flex-shrink-0">
@@ -378,6 +378,13 @@ $appSubtitle = $settingsModel->getValueWithRole('app_subtitle', $role, 'SISTEM S
                 class="sidebar-link <?= (uri_string() == 'admin/settings') ? 'active' : '' ?>">
                 <i class="bi bi-sliders2"></i> <span>Konfigurasi Sistem</span>
             </a>
+
+            <div class="menu-label">Kembali</div>
+            <a href="<?= base_url('map') ?>"
+                class="sidebar-link <?= (uri_string() == 'admin/map') ? 'active' : '' ?>">
+                <i class="bi bi-map"></i> <span>Peta GeoTagging</span>
+            </a>
+
 
             <?php if ($role == 'admin'): ?>
                 <div class="menu-label">Administrator Utama</div>

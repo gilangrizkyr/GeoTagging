@@ -99,11 +99,19 @@ endif; ?>
                                     </div>
                                 </td>
                                 <td class="py-3">
-                                    <div class="fw-600 text-secondary">
+                                    <div class="fw-600 text-secondary mb-1">
                                         <?= esc($zone['peruntukan']) ?>
                                     </div>
-                                    <div class="small fw-500 text-muted opacity-75">
-                                        <?= esc($zone['sub_zona'] ?? '-') ?>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="small fw-500 text-muted opacity-75">
+                                            <?= esc($zone['sub_zona'] ?? '-') ?>
+                                        </span>
+                                        <?php if (!empty($zone['sumber_data'])): ?>
+                                            <span class="badge bg-light text-primary border border-primary border-opacity-10 fw-700"
+                                                style="font-size: 0.65rem;">
+                                                <i class="bi bi-shield-check me-1"></i> <?= esc($zone['sumber_data']) ?>
+                                            </span>
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                                 <td class="text-end pe-4 py-3">
